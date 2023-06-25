@@ -1,8 +1,6 @@
 import path from 'path';
 import { Configuration } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-// import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-// import ESLintPlugin from 'eslint-webpack-plugin';
 
 const config: Configuration = {
   mode: 'production',
@@ -52,12 +50,6 @@ const config: Configuration = {
       title: 'gameboxd',
       favicon: 'src/assets/favicon.ico',
     }),
-    // new ForkTsCheckerWebpackPlugin({
-    //   async: false
-    // }),
-    // new ESLintPlugin({
-    //   extensions: ['js', 'jsx', 'ts', 'tsx']
-    // }),
   ],
 };
 
