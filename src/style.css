@@ -75,7 +75,7 @@ main {
   margin: 16px;
   color: var(--text);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
 }
 
@@ -84,15 +84,24 @@ main {
   cursor: pointer;
   border-radius: 8px;
   padding: 16px;
-  font-size: 0.8rem;
+  /* font-size: 0.8rem; */
   font-weight: 300;
   height: fit-content;
   container: search / inline-size;
 }
 
-@container search (min-width: 0px){
+@container search (min-width: 0px) {
   .search-results--item-contents {
     height: 125cqw;
+    font-size: min(calc(0.8rem + 0.5cqw), 1rem);
+  }
+  .search-results--item-name {
+    font-size: min(calc(1rem + 0.5cqw), 1.2rem);
+    text-wrap: balance;
+  }
+
+  .release-date .rest {
+    font-size: min(calc(0.7rem + 0.5cqw), 0.9rem);
   }
 }
 
@@ -102,7 +111,7 @@ main {
 
 .search-results--item-name {
   font-weight: 400;
-  font-size: 1rem;
+  /* font-size: 1rem; */
 }
 
 .release-date {
@@ -120,7 +129,6 @@ main {
   left: calc(100% + 0.3em);
   top: 0;
   width: max-content;
-  font-size: 0.7rem;
 }
 
 .search-results--image-wrapper {
@@ -158,6 +166,7 @@ main {
   width: 100%;
   /* border-bottom: 2px solid var(--primary); */
   display: flex;
+  justify-content: center;
   position: relative;
 }
 
@@ -167,7 +176,7 @@ main {
   position: absolute;
   pointer-events: none;
   height: 2px;
-  top: 100%;
+  top: calc(100% + 5px);
   left: 0;
   right: 0;
   margin-inline: auto;
@@ -185,39 +194,54 @@ main {
   transition: 0.5s;
 }
 
-.search-form--contents:has(.search:focus):after {
+.search-form--contents:has(.search:focus)::after {
   width: 95%;
 }
 
 .search {
-  flex-grow: 1;
   text-align: center;
   font-family: inherit;
   appearance: none;
   border: none;
   background-color: transparent;
   color: var(--text);
-  /* border-radius: 50vw 0 0 50vw; */
-  height: 2rem;
-  text-indent: 8px;
+  height: clamp(1.5rem, 20px + 2vw, 3rem);
+  color: var(--primary);
+  font-size: clamp(0.8rem, 14px + 2vw, 1.5rem);
+  transition: font-size 0.5s, font-weight 0.5s, width 0.5s;
+  font-weight: 300;
+  width: calc(95% - 64px);
 }
 
 .search:focus {
+  font-weight: 400;
   outline: none;
+  color: var(--text);
+  width: calc(95% - (64px - 5%));
+  font-size: clamp(1rem, 16px + 2vw, 2rem);
 }
 
 .search-button {
+  top: 0;
+  bottom: 0;
+  right: 2.5%;
+  margin-block: auto;
+  position: absolute;
   background-color: transparent;
   border-radius: 50%;
-  height: 2rem;
-  width: 2rem;
+  height: 32px;
+  width: 32px;
   padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.5s;
 }
 
 .search-button img {
-   width: 100%;
+  width: 100%;
 }
 
+.search-form--contents:has(.search:focus) .search-button {
+  right: 0;
+}
