@@ -16,6 +16,7 @@
     "prettier"
   ],
   "rules": {
+    "no-nested-ternary": 0,
     "react/prop-types": "off",
     "quotes": ["error", "single", { "avoidEscape": true }],
     "jsx-quotes": ["error", "prefer-single"],
@@ -23,10 +24,7 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",
     "@typescript-eslint/no-explicit-any": 0,
-    "import/no-extraneous-dependencies": [
-      "error",
-      {"devDependencies": true}
-    ]
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
   },
   "settings": {
     "react": {

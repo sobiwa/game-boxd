@@ -14,7 +14,7 @@
   --header-height: calc(3rem + 2vw);
   --background: #35363b;
   --background-fade: hsl(228, 5%, 25%);
-  --text: #f6e8ea;
+  --text: #e2e2e2;
   --primary: #82c995;
   --pink: #ef5d60;
   --purple: #ae6b9c;
@@ -80,6 +80,7 @@ main {
 }
 
 .search-results--item {
+  position: relative;
   width: 100%;
   cursor: pointer;
   border-radius: 8px;
@@ -111,24 +112,29 @@ main {
 
 .search-results--item-name {
   font-weight: 400;
-  /* font-size: 1rem; */
 }
 
 .release-date {
-  position: relative;
-  width: fit-content;
+  display: flex;
+  gap: 0.3em;
 }
 
-.release-date:hover .rest {
-  display: block;
+.release-date:hover .rest-wrapper {
+  grid-template-columns: 1fr;
+}
+
+.rest-wrapper {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 0.2s;
 }
 
 .release-date .rest {
-  display: none;
-  position: absolute;
-  left: calc(100% + 0.3em);
-  top: 0;
-  width: max-content;
+  overflow: hidden;
+}
+
+.release-date .rest span {
+  white-space: nowrap;
 }
 
 .search-results--image-wrapper {
@@ -156,6 +162,7 @@ main {
   width: 100%;
   padding: 8px;
   border-radius: 50vw;
+  position: relative;
 }
 
 .search-form:hover {
@@ -168,6 +175,15 @@ main {
   display: flex;
   justify-content: center;
   position: relative;
+}
+
+.search-form label {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: text;
+  top: 0;
+  left: 0;
 }
 
 .search-form--contents::before,
@@ -198,7 +214,7 @@ main {
   width: 95%;
 }
 
-.search {
+input.search {
   text-align: center;
   font-family: inherit;
   appearance: none;
@@ -211,6 +227,24 @@ main {
   transition: font-size 0.5s, font-weight 0.5s, width 0.5s;
   font-weight: 300;
   width: calc(95% - 64px);
+}
+
+input:-webkit-autofill:focus,
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 40rem var(--background) inset;
+  font-family: inherit;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: var(--primary);
+}
+
+.search-form:hover input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 40rem var(--background-fade) inset;
 }
 
 .search:focus {
@@ -244,4 +278,71 @@ main {
 
 .search-form--contents:has(.search:focus) .search-button {
   right: 0;
+}
+
+.search-results--item:hover .platform-icon-container {
+  opacity: 0.2;
+}
+
+.platform-icon-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  gap: 3px;
+  /* background-color: var(--text); */
+  opacity: 0;
+  width: fit-content;
+  border-radius: 50vw;
+  padding: 2px 8px;
+}
+
+.search-results--item:hover .platform-icon-container:hover {
+  opacity: 1;
+}
+
+.platform-icon {
+  height: 100%;
+}
+
+.platform-icon img {
+  height: 100%;
+}
+
+.meta-score {
+  opacity: 0.8;
+  font-weight: 800;
+  padding: 3px;
+  color: white;
+  font-size: min(1rem, 18px);
+  width: fit-content;
+  letter-spacing: 0.05em;
+  border-radius: 0.3rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  scale: 0.6;
+  transition: 0.1s;
+  /* box-shadow: 1px 1px 5px black; */
+}
+
+.search-results--item:hover .meta-score {
+  opacity: 1;
+  box-shadow: 1px 1px 5px black;
+  scale: 1;
+}
+
+.biote-ranker {
+  height: 2rem;
+  display: flex;
+}
+
+.biote-ranker-biote {
+  height: 100%;
+}
+
+.biote-ranker-biote img {
+  height: 100%;
 }

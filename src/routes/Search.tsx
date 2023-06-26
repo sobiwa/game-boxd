@@ -1,62 +1,67 @@
-import { useState } from 'react';
-import { Form, useActionData } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Form, useLoaderData } from 'react-router-dom';
 import searchIcon from '../assets/icons/search.svg';
-import { type Response as gamesSearchResponse } from '../mocks/actions';
+import { type Response as GamesSearchResponse } from '../mocks/actions';
 import SearchResult from '../components/SearchResult';
 
-type Response = gamesSearchResponse | string;
+// TODO: compare search results with user data in firebase to populate cards
 
-export async function action({ request }: any) {
-  const data = await request.formData();
-  const search: string = data.get('search');
-  try {
-    const response = await fetch(
-      `https://api.rawg.io/api/games?key=0022e0846f034f58b2507bd0e9e5c8d0&page_size=10&search=${search}`
-    );
-    const games = await response.json();
-    return games;
-  } catch (err) {
-    let errorMessage = 'failed to fetch games';
-    if (err instanceof Error) {
-      errorMessage = err.message;
+export async function loader({ request }: any): Promise<GamesSearchResponse> {
+  const url = new URL(request.url);
+  const q = url.searchParams.get('q');
+  let games;
+  if (q) {
+    try {
+      const response = await fetch(
+        `https://api.rawg.io/api/games?key=0022e0846f034f58b2507bd0e9e5c8d0&page_size=10&search=${q}`
+      );
+      games = await response.json();
+    } catch (err) {
+      throw new Error(
+        `Problem fetching games from API: ${(err as Error).message}`
+      );
     }
-    return errorMessage;
   }
+  return { games, q };
 }
 
 export default function Search() {
-  const [search, setSearch] = useState('');
-  const games = useActionData() as Response;
+  const { games, q } = useLoaderData() as GamesSearchResponse;
   console.log(games);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    setSearch(e.target.value);
-  }
+  useEffect(() => {
+    const searchInput = document.getElementById('q');
+    if (searchInput) {
+      (searchInput as HTMLInputElement).value = q ?? '';
+    }
+  }, [q]);
 
   return (
     <div className='search-page'>
-      <Form className='search-form' method='post' action='/search'>
+      <Form className='search-form' role='search'>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label className='search-input-label' htmlFor='search-input' />
         <div className='search-form--contents'>
           <input
+            id='q'
             className='search'
-            type='text'
-            name='search'
-            value={search}
-            onChange={handleChange}
+            type='search'
+            name='q'
+            defaultValue={q ?? ''}
           />
           <button className='search-button' type='submit'>
             <img src={searchIcon} alt='search' />
           </button>
         </div>
       </Form>
-      <div className='search-results'>
-        {games !== null &&
-          games !== undefined &&
-          typeof games !== 'string' &&
-          games.results.map((game) => (
+      {!!games && games.results?.length === 0 && <div>No results found</div>}
+      {!!games && !!games.results?.length && (
+        <div className='search-results'>
+          {games.results.map((game) => (
             <SearchResult key={game.id} game={game} />
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
