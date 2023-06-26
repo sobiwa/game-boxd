@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Form, useLoaderData } from 'react-router-dom';
+import { Form, useLoaderData, useNavigation } from 'react-router-dom';
 import searchIcon from '../assets/icons/search.svg';
 import { type Response as GamesSearchResponse } from '../mocks/actions';
 import SearchResult from '../components/SearchResult';
@@ -28,6 +28,11 @@ export async function loader({ request }: any): Promise<GamesSearchResponse> {
 export default function Search() {
   const { games, q } = useLoaderData() as GamesSearchResponse;
   console.log(games);
+  const navigation = useNavigation();
+
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has('q');
 
   useEffect(() => {
     const searchInput = document.getElementById('q');
@@ -44,7 +49,7 @@ export default function Search() {
         <div className='search-form--contents'>
           <input
             id='q'
-            className='search'
+            className={`search ${searching ? 'searching' : ''}`}
             type='search'
             name='q'
             defaultValue={q ?? ''}

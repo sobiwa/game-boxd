@@ -45,7 +45,12 @@ export interface Response {
   games: Games | undefined;
 }
 
-export function loader({request}: any): Response {
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export async function loader({request}: any): Promise<Response> {
+  await delay(5000);
   const url = new URL(request.url);
   const q = url.searchParams.get('q');
   if (q === '') {

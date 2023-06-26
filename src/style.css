@@ -214,6 +214,32 @@ main {
   width: 95%;
 }
 
+@keyframes searching {
+  0% {
+    width: 0%;
+  }
+  50% {
+    margin-inline: 2.5% auto;
+    width: 95%;
+  }
+  51% {
+    margin-inline: auto 2.5%;
+  }
+  100% {
+    margin-inline: auto 2.5%;
+    width: 0%;
+  }
+
+}
+
+.search-form--contents:has(.search.searching)::after {
+  margin-inline: 2.5% auto;
+  animation-name: searching;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
 input.search {
   text-align: center;
   font-family: inherit;
