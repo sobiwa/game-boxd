@@ -229,7 +229,6 @@ main {
     margin-inline: auto 2.5%;
     width: 0%;
   }
-
 }
 
 .search-form--contents:has(.search.searching)::after {
@@ -253,6 +252,30 @@ input.search {
   transition: font-size 0.5s, font-weight 0.5s, width 0.5s;
   font-weight: 300;
   width: calc(95% - 64px);
+}
+
+input.search::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  height: 80%;
+  width: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  position: absolute;
+  background-image: url('./assets/icons/close.svg');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  background-color: var(--background);
+}
+
+.search-form:hover input.search::-webkit-search-cancel-button {
+  background-color: var(--background-fade);
+}
+
+input.search::-webkit-search-cancel-button:hover {
+  outline: 1px solid var(--text);
 }
 
 input:-webkit-autofill:focus,
