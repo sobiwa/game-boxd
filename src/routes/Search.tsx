@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Form, useLoaderData, useNavigation } from 'react-router-dom';
 import searchIcon from '../assets/icons/search.svg';
 import { type Response as GamesSearchResponse } from '../mocks/actions';
@@ -30,6 +30,10 @@ export default function Search() {
   console.log(games);
   const navigation = useNavigation();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const lengthRef = useRef(0);
+  const [fontSize, setFontSize] = useState<number | null>(null);
+
   const searching =
     navigation.location &&
     new URLSearchParams(navigation.location.search).has('q');
@@ -41,6 +45,38 @@ export default function Search() {
     }
   }, [q]);
 
+  function isOverflown(element: HTMLInputElement) {
+    return element.scrollWidth > element.clientWidth;
+  }
+
+  function manageFontSize() {
+    if (!inputRef.current) return;
+    const currentInputLength = (inputRef.current as HTMLInputElement).value
+      .length;
+    if (isOverflown(inputRef.current)) {
+      const cssUnitValue = inputRef.current.computedStyleMap().get('font-size');
+      if (!cssUnitValue) return;
+      const currentFontSize = (cssUnitValue as CSSUnitValue).value;
+      setFontSize((prev) => {
+        if (prev === null) {
+          return currentFontSize - 1;
+        }
+        return prev - 1;
+      });
+    } else {
+      setFontSize((prev) => {
+        if (
+          prev === null ||
+          lengthRef.current >
+            (inputRef.current as HTMLInputElement).value.length
+        )
+          return null;
+        return prev;
+      });
+    }
+    lengthRef.current = currentInputLength;
+  }
+
   return (
     <div className='search-page'>
       <Form className='search-form' role='search'>
@@ -48,11 +84,14 @@ export default function Search() {
         <label className='search-input-label' htmlFor='search-input' />
         <div className='search-form--contents'>
           <input
+            style={{ fontSize: fontSize ? `${fontSize}px` : '' }}
+            ref={inputRef}
             id='q'
             className={`search ${searching ? 'searching' : ''}`}
             type='search'
             name='q'
             defaultValue={q ?? ''}
+            onChange={manageFontSize}
           />
           <button className='search-button' type='submit'>
             <img src={searchIcon} alt='search' />

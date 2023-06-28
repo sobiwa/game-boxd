@@ -50,7 +50,7 @@ function delay(ms: number) {
 }
 
 export async function loader({request}: any): Promise<Response> {
-  await delay(5000);
+  // await delay(5000);
   const url = new URL(request.url);
   const q = url.searchParams.get('q');
   if (q === '') {
