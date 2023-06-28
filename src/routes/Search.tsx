@@ -25,6 +25,11 @@ export async function loader({ request }: any): Promise<GamesSearchResponse> {
   return { games, q };
 }
 
+interface FontSizeRecord {
+  breakingPoint: number;
+  [key: number]: number;
+}
+
 export default function Search() {
   const { games, q } = useLoaderData() as GamesSearchResponse;
   console.log(games);
@@ -32,6 +37,7 @@ export default function Search() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const lengthRef = useRef(0);
+  const fontSizeRecords = useRef<FontSizeRecord>({});
   const [fontSize, setFontSize] = useState<number | null>(null);
 
   const searching =
@@ -58,19 +64,34 @@ export default function Search() {
       if (!cssUnitValue) return;
       const currentFontSize = (cssUnitValue as CSSUnitValue).value;
       setFontSize((prev) => {
+        let newFontSize;
         if (prev === null) {
-          return currentFontSize - 1;
+          fontSizeRecords.current.breakingPoint = currentInputLength;
+          newFontSize = currentFontSize - 1;
+        } else {
+          newFontSize = prev - 1;
         }
-        return prev - 1;
+        const filteredFontSize = newFontSize >= 16 ? newFontSize : 16;
+        fontSizeRecords.current[currentInputLength] = filteredFontSize;
+        return filteredFontSize;
       });
     } else {
       setFontSize((prev) => {
         if (
           prev === null ||
-          lengthRef.current >
-            (inputRef.current as HTMLInputElement).value.length
+          currentInputLength < fontSizeRecords.current.breakingPoint
         )
           return null;
+        if (
+          lengthRef.current >
+          (inputRef.current as HTMLInputElement).value.length
+        ) {
+          if (currentInputLength in fontSizeRecords.current) {
+            console.log('using cache');
+            return fontSizeRecords.current[currentInputLength];
+          }
+        }
+        fontSizeRecords.current[currentInputLength] = prev;
         return prev;
       });
     }
