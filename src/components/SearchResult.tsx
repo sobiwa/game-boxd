@@ -1,12 +1,15 @@
 import { useRef } from 'react';
 import { format, parseISO } from 'date-fns';
 import randomLogo from '../assets/logo';
-import type { Result } from '../mocks/actions';
+import { type Result } from '../mocks/actions';
 import PlatformsIcons from './PlatformIcons';
-import bioteEmpty from '../assets/icons/biotes/biote-empty.svg';
+import BioteRanker from './BioteRanker';
+import BacklogButton from './BacklogButton';
+import { type UserGameDataItem } from '../routes/Search';
 
 interface SearchProps {
   game: Result;
+  initialUserData: UserGameDataItem | undefined;
 }
 
 interface Release {
@@ -14,7 +17,15 @@ interface Release {
   rest?: string;
 }
 
-export default function SearchResult({ game }: SearchProps): JSX.Element {
+/*
+Initialize userData with props. 
+Origin is ONE firebase read of all search results.
+Updates to user data on firebase will be displayed
+and controlled based on success of writes, avoiding
+unnecessary reads
+*/
+
+export default function SearchResult({ game, initialUserData }: SearchProps) {
   const imgSrc = useRef(game.background_image ?? randomLogo());
 
   const release: Release = {
@@ -62,12 +73,11 @@ export default function SearchResult({ game }: SearchProps): JSX.Element {
             {game.metacritic}
           </div>
         )}
-        <div className='biote-ranker'>
-          <div className='biote-ranker-biote'>
-            <img src={bioteEmpty}/>
-          </div>
-
-        </div>
+        <BioteRanker initialRating={initialUserData?.rating} gameID={game.id} />
+        <BacklogButton
+          initialSetting={initialUserData?.backlogged}
+          gameID={game.id}
+        />
       </div>
     </div>
   );

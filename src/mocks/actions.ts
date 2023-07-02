@@ -1,5 +1,5 @@
 export interface Result {
-  id?: number;
+  id: number;
   slug?: string;
   name?: string;
   released?: string | null;
@@ -45,9 +45,9 @@ export interface Response {
   games: Games | undefined;
 }
 
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+// function delay(ms: number) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }
 
 export async function loader({request}: any): Promise<Response> {
   // await delay(5000);
@@ -67,6 +67,7 @@ export async function loader({request}: any): Promise<Response> {
         next: null,
         previous: null,
         results: [],
+        user_platforms: false,
       }
     }
   }

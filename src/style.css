@@ -4,6 +4,11 @@
   font-weight: 100 900;
 }
 
+@font-face {
+  font-family: 'Nunito';
+  src: url('./assets/fonts/NunitoSans-VariableFont_YTLC\,opsz\,wdth\,wght.woff');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -43,6 +48,7 @@ html {
 button {
   appearance: none;
   border: none;
+  background-color: transparent;
   font-family: inherit;
   cursor: pointer;
 }
@@ -75,7 +81,7 @@ main {
   margin: 16px;
   color: var(--text);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(calc(200px + 3vw), 1fr));
   gap: 16px;
 }
 
@@ -93,16 +99,37 @@ main {
 
 @container search (min-width: 0px) {
   .search-results--item-contents {
+    --icon: clamp(20px, 1.3rem + 1cqw, 15cqw);
     height: 125cqw;
-    font-size: min(calc(0.8rem + 0.5cqw), 1rem);
+    font-size: min(calc(16px + 1cqw), 1.1rem);
   }
+
   .search-results--item-name {
-    font-size: min(calc(1rem + 0.5cqw), 1.2rem);
+    font-size: min(calc(20px + 1cqw), 2rem);
     text-wrap: balance;
+    line-height: 1.1
   }
 
   .release-date .rest {
-    font-size: min(calc(0.7rem + 0.5cqw), 0.9rem);
+    font-size: min(calc(14px + 1cqw), 1rem);
+  }
+
+  .biote-ranker {
+    margin-top: calc(var(--icon) * 0.2);
+    height: var(--icon);
+  }
+
+  .backlog-button {
+    margin: calc(var(--icon) * 0.2);
+    height: calc(var(--icon) * 1.2);
+  }
+
+  .meta-score {
+    font-size: min(calc(14px + 1cqw), 0.8rem);
+  }
+
+  .search-results--item:hover .meta-score {
+    font-size: min(calc(16px + 1cqw), 1.1rem);
   }
 }
 
@@ -375,14 +402,14 @@ input:-webkit-autofill {
   font-weight: 800;
   padding: 3px;
   color: white;
-  font-size: min(1rem, 18px);
+  /* font-size: min(1rem, 18px); */
   width: fit-content;
   letter-spacing: 0.05em;
   border-radius: 0.3rem;
   position: absolute;
   top: 0;
   left: 0;
-  scale: 0.6;
+  /* scale: 0.6; */
   transition: 0.1s;
   /* box-shadow: 1px 1px 5px black; */
 }
@@ -390,18 +417,72 @@ input:-webkit-autofill {
 .search-results--item:hover .meta-score {
   opacity: 1;
   box-shadow: 1px 1px 5px black;
-  scale: 1;
+  /* scale: 1; */
+  /* font-size: min(1.5rem, 24px); */
 }
 
 .biote-ranker {
-  height: 2rem;
+  /* height: 100%; */
+  /* max-height: 30px; */
+  display: flex;
+  width: fit-content;
+  transition: opacity 0.1s;
+}
+
+@keyframes temp {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+.temp {
+  opacity: 0.8;
+}
+
+.temp .rank-biote {
+  --delay: 0.1s;
+  animation-name: temp;
+  animation-direction: alternate;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+}
+
+.temp .rank-biote:nth-of-type(2) {
+  animation-delay: calc(var(--delay));
+}
+.temp .rank-biote:nth-of-type(3) {
+  animation-delay: calc(var(--delay) * 2);
+}
+.temp .rank-biote:nth-of-type(4) {
+  animation-delay: calc(var(--delay) * 3);
+}
+.temp .rank-biote:nth-of-type(5) {
+  animation-delay: calc(var(--delay) * 4);
+}
+
+.biote-ranker form {
   display: flex;
 }
 
-.biote-ranker-biote {
+.rank-biote {
   height: 100%;
+  aspect-ratio: 1;
+  position: relative;
+  display: flex;
 }
 
-.biote-ranker-biote img {
+.rank-biote .rank-button {
+  flex-grow: 1;
+}
+
+.rank-biote .rank-biote-img {
+  height: 100%;
+  position: absolute;
+}
+
+.backlog-button img {
   height: 100%;
 }

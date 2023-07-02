@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import randomLogo from './assets/logo';
+import useUser from './hooks/useUser';
 
 export default function App() {
   const [logo, setLogo] = useState(randomLogo());
+  const user = useUser();
+  console.log(user);
 
   return (
     <div className='app'>
@@ -13,7 +16,7 @@ export default function App() {
         </div>
       </div>
       <main>
-        <Outlet />
+        <Outlet context={{user}}/>
       </main>
     </div>
   );
