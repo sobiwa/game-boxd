@@ -53,6 +53,20 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
+export async function getUserDataForGame(gameID: number | string) {
+  const userGamesRef = collection(db, 'userGameData');
+  const q = query(
+    userGamesRef,
+    where('userID', '==', auth.currentUser?.uid),
+    where('gameID', '==', gameID)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    return 'no user data';
+  }
+  return querySnapshot.docs.map((item) => item.data());
+}
+
 export async function getUserDataForGamesArray(gameIDs: number[]) {
   const userGamesRef = collection(db, 'userGameData');
   const q = query(
@@ -75,7 +89,7 @@ export async function updateUserGameData(update: UserGameData) {
   const q = query(
     userGamesRef,
     where('userID', '==', auth.currentUser?.uid),
-    where('gameID', '==', update.gameID)
+    where('gameID', '==', +update.gameID)
   );
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) {
@@ -97,6 +111,7 @@ export async function updateUserGameData(update: UserGameData) {
         updateDoc(doc(db, `userGameData/${item}`), { ...update })
       )
     );
+    console.log('doc updated');
     return 'Successfully updated data';
   } catch (err) {
     if (err instanceof Error) {

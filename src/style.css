@@ -18,8 +18,10 @@
 :root {
   --header-height: calc(3rem + 2vw);
   --background: #35363b;
+  --background-transparent: #35363b93;
   --background-fade: hsl(228, 5%, 25%);
   --text: #e2e2e2;
+  --sub-text: hsl(0, 0%, 75%);
   --primary: #82c995;
   --pink: #ef5d60;
   --purple: #ae6b9c;
@@ -43,6 +45,12 @@ html {
 .app {
   min-height: 100vh;
   min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
 }
 
 button {
@@ -88,7 +96,6 @@ main {
 .search-results--item {
   position: relative;
   width: 100%;
-  cursor: pointer;
   border-radius: 8px;
   padding: 16px;
   /* font-size: 0.8rem; */
@@ -97,17 +104,27 @@ main {
   container: search / inline-size;
 }
 
+.search-results--link {
+  text-decoration: none;
+  appearance: none;
+  color: var(--text);
+}
+
+.search-results--link:hover {
+  text-decoration: underline;
+}
+
 @container search (min-width: 0px) {
   .search-results--item-contents {
     --icon: clamp(20px, 1.3rem + 1cqw, 15cqw);
-    height: 125cqw;
+    min-height: 110cqw;
     font-size: min(calc(16px + 1cqw), 1.1rem);
   }
 
   .search-results--item-name {
     font-size: min(calc(20px + 1cqw), 2rem);
     text-wrap: balance;
-    line-height: 1.1
+    line-height: 1.1;
   }
 
   .release-date .rest {
@@ -119,9 +136,24 @@ main {
     height: var(--icon);
   }
 
+  .backlog-button-container {
+    position: absolute;
+    right: 5cqw;
+    bottom: 5cqw;
+  }
+
   .backlog-button {
     margin: calc(var(--icon) * 0.2);
     height: calc(var(--icon) * 1.2);
+    aspect-ratio: 1.32 / 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .backlog-img-wrapper {
+    height: 100%;
+    width: auto;
   }
 
   .meta-score {
@@ -131,6 +163,14 @@ main {
   .search-results--item:hover .meta-score {
     font-size: min(calc(16px + 1cqw), 1.1rem);
   }
+}
+
+.backlog-button-container:not(.backlogged) {
+  display: none;
+}
+
+.search-results--item:hover .backlog-button-container {
+  display: block;
 }
 
 .search-results--item:hover {
@@ -171,6 +211,7 @@ main {
   justify-content: center;
   height: 50%;
   border-radius: 8px;
+  position: relative;
 }
 
 .search-results--item img {
@@ -366,28 +407,31 @@ input:-webkit-autofill {
   right: 0;
 }
 
+.platform-icon-container {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  position: absolute;
+  background-color: var(--background-transparent);
+}
+
+.search-results--item .platform-icon-container {
+  top: 0;
+  right: 0;
+  height: 1.5rem;
+  gap: 3px;
+  border-radius: 0 0 0 50vw;
+  padding: 2px 8px;
+}
+
+/* 
 .search-results--item:hover .platform-icon-container {
   opacity: 0.2;
 }
 
-.platform-icon-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  height: 1.5rem;
-  gap: 3px;
-  /* background-color: var(--text); */
-  opacity: 0;
-  width: fit-content;
-  border-radius: 50vw;
-  padding: 2px 8px;
-}
-
 .search-results--item:hover .platform-icon-container:hover {
   opacity: 1;
-}
+} */
 
 .platform-icon {
   height: 100%;
@@ -485,4 +529,93 @@ input:-webkit-autofill {
 
 .backlog-button img {
   height: 100%;
+}
+
+.game-info-page {
+  width: min(1000px, 100%);
+  margin-inline: auto;
+  --height: min(calc(1rem + 1vw), 30px);
+}
+
+.game-info-page .platform-icon-container {
+  height: var(--height);
+  padding: calc(var(--height) * 0.3);
+  padding-right: calc(var(--height) * 0.5);
+  border-radius: 0 50vw 0 0;
+  box-sizing: content-box;
+  bottom: 0;
+  left: 0;
+}
+
+.game-info-page .title-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: calc(var(--height) * 0.75);
+  font-size: var(--height);
+}
+
+.title-container .platform-icon-container {
+  height: var(--height);
+}
+
+.game-info-page .img-container {
+  margin-top: calc(var(--height) * 0.2);
+  width: 100%;
+  max-height: 500px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.game-info-page .img-container .bg-img {
+  width: 100%;
+  height: auto;
+}
+
+.description {
+  color: var(--sub-text);
+  position: relative;
+}
+
+.fade {
+  overflow: hidden;
+  position: relative;
+  height: 4.8em; /* exactly three lines */
+}
+
+.fade::after {
+  content: '';
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 70%;
+  height: 1.2em;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    var(--background) 50%
+  );
+}
+
+.description .description-expansion-button {
+  width: 7.5em;
+  border: 1px solid var(--sub-text);
+  /* padding: 0 1em; */
+  color: var(--text);
+  border-radius: 50vw;
+  opacity: 0.5;
+}
+
+.description:has(.fade) .description-expansion-button {
+  position: absolute;
+  top: 5.8em;
+  right: calc(35% - 7.5em);
+}
+
+.description .description-expansion-button:hover {
+  opacity: 1;
 }

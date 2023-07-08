@@ -10,7 +10,6 @@
   "extends": [
     "airbnb",
     "airbnb-typescript",
-    // "standard-with-typescript",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"

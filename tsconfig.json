@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,6 +1,5 @@
 import { Params } from 'react-router-dom';
 import { updateUserGameData } from '../firebase';
-import { type UserGameDataItem } from './Search';
 
 // function delay(ms: number) {
 //   return new Promise(resolve => setTimeout(resolve, ms));
@@ -29,6 +28,9 @@ export default async function editUserGameData({
   const newUpdates: AlteredData = { ...updates, gameID: +gameID };
   if (newUpdates.backlogged) {
     newUpdates.backlogged = newUpdates.backlogged === 'true';
+  }
+  if (newUpdates.rating) {
+    newUpdates.rating = +newUpdates.rating;
   }
   console.log(newUpdates);
   try {

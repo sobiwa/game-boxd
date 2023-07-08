@@ -1,20 +1,16 @@
 import { useRef } from 'react';
-import { format, parseISO } from 'date-fns';
+import { Link } from 'react-router-dom';
 import randomLogo from '../assets/logo';
 import { type Result } from '../mocks/actions';
 import PlatformsIcons from './PlatformIcons';
 import BioteRanker from './BioteRanker';
 import BacklogButton from './BacklogButton';
-import { type UserGameDataItem } from '../routes/Search';
+import { type UserGameDataItem } from '../App';
+import ReleaseDate from './ReleaseDate';
 
 interface SearchProps {
   game: Result;
   initialUserData: UserGameDataItem | undefined;
-}
-
-interface Release {
-  year: string | null;
-  rest?: string;
 }
 
 /*
@@ -28,16 +24,6 @@ unnecessary reads
 export default function SearchResult({ game, initialUserData }: SearchProps) {
   const imgSrc = useRef(game.background_image ?? randomLogo());
 
-  const release: Release = {
-    year: null,
-  };
-
-  if (game.released) {
-    const date = parseISO(game.released);
-    release.year = format(date, 'yyyy');
-    release.rest = format(date, 'MMMM d');
-  }
-
   function metaColor(num: number): string {
     return num > 74 ? '#6c3' : num > 49 ? '#fc3' : '#f00';
   }
@@ -45,25 +31,16 @@ export default function SearchResult({ game, initialUserData }: SearchProps) {
   return (
     <div className='search-results--item'>
       <div className='search-results--item-contents'>
-        <div className='search-results--image-wrapper'>
-          <img src={imgSrc.current} alt={game.name} />
-        </div>
-        <div className='search-results--item-name'>{game.name}</div>
-        {release.year && (
-          <div>
-            <div className='release-date'>
-              <div className='year'>{release.year}</div>
-              <div className='rest-wrapper'>
-                <div className='rest'>
-                  <span>{`| ${release.rest}`}</span>
-                </div>
-              </div>
-            </div>
+        <Link className='search-results--link' to={`../games/${game.id}`}>
+          <div className='search-results--image-wrapper'>
+            <img src={imgSrc.current} alt={game.name} />
+            {!!game.parent_platforms?.length && (
+              <PlatformsIcons platforms={game.parent_platforms} />
+            )}
           </div>
-        )}
-        {!!game.parent_platforms?.length && (
-          <PlatformsIcons platforms={game.parent_platforms} />
-        )}
+          <div className='search-results--item-name'>{game.name}</div>
+        </Link>
+        {!!game.released && <ReleaseDate rawDate={game.released} />}
         {!!game.metacritic && (
           <div
             title='Metascore'

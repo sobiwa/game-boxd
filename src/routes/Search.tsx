@@ -6,10 +6,10 @@ import {
   useOutletContext,
 } from 'react-router-dom';
 import searchIcon from '../assets/icons/search.svg';
-import { type Response as GamesSearchResponse } from '../mocks/actions';
+import type { Response as GamesSearchResponse } from '../mocks/actions';
 import SearchResult from '../components/SearchResult';
 import { getUserDataForGamesArray } from '../firebase';
-import type { User } from '../hooks/useUser';
+import type { UserGameData, OutletContext } from '../App';
 
 // TODO: compare search results with user data in firebase to populate cards
 
@@ -37,23 +37,15 @@ interface FontSizeRecord {
   [key: number]: number;
 }
 
-export interface UserGameDataItem {
-  gameID: number;
-  userID?: string;
-  backlogged?: boolean;
-  rating?: number;
-  review?: string;
-}
-
-interface UserGameData {
-  [key: number]: UserGameDataItem;
-}
-
 export default function Search() {
   const { games, q } = useLoaderData() as GamesSearchResponse;
-  const { user }: { user: User } = useOutletContext();
+  const {
+    user,
+    setGameData,
+    userGameData,
+    setUserGameData,
+  }: OutletContext = useOutletContext();
 
-  const [userGameData, setUserGameData] = useState<UserGameData | null>(null);
   /* TODO: 
       x map games array into an array of ids
       x contact firebase to return data of matches
@@ -85,6 +77,10 @@ export default function Search() {
       fetchUserData();
     }
   }, [user]);
+
+  useEffect(() => {
+    setGameData(games?.results ?? null);
+  }, [games]);
 
   const navigation = useNavigation();
 

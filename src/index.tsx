@@ -4,16 +4,18 @@ import { createRoot } from 'react-dom/client';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import Search, { loader as searchLoader } from './routes/Search';
-import { loader as mockSearchLoader } from './mocks/actions';
+import { loader as mockSearchLoader, mockGameInfoLoader } from './mocks/actions';
 import editUserGameData from './routes/editUserGameData';
+import GameInfo, { loader as gameInfoLoader } from './routes/GameInfo';
 
 const router = createHashRouter([
   {
     path: '/',
     element: <App />,
     children: [
-      { path: 'search', element: <Search />, loader: searchLoader },
+      { path: 'search', element: <Search />, loader: mockSearchLoader },
       { path: 'edit/:gameID', action: editUserGameData },
+      { path: 'games/:gameID', element: <GameInfo />, loader: mockGameInfoLoader },
     ],
   },
 ]);

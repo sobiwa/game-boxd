@@ -4,23 +4,15 @@ import book from '../assets/icons/book-filled-ink.png';
 import bookClosed from '../assets/icons/book-closed.png';
 
 interface PropTypes {
-  initialSetting?: boolean;
   gameID: number;
+  initialSetting: boolean | undefined;
 }
 
 export default function BacklogButton({ initialSetting, gameID }: PropTypes) {
   const fetcher = useFetcher();
   const [userSetting, setUserSetting] = useState(initialSetting ?? false);
 
-  let tempBacklogged;
-
-  if (fetcher.formData) {
-    console.log(fetcher.formData.get('backlogged') === 'true');
-    tempBacklogged = fetcher.formData.get('backlogged') === 'true' ? book : bookClosed;
-  }
-
   useEffect(() => {
-    console.log('setting userSetting');
     if (fetcher?.data?.backlogged !== undefined) {
       setUserSetting(fetcher.data.backlogged);
     }
@@ -31,16 +23,16 @@ export default function BacklogButton({ initialSetting, gameID }: PropTypes) {
     setUserSetting(initialSetting ?? false);
   }, [initialSetting]);
 
-  let imgSrc;
-
-  if (tempBacklogged) {
-    imgSrc = tempBacklogged
-  } else {
-    imgSrc = userSetting ? book : bookClosed;
-  }
+  const appearsBacklogged =
+    (fetcher.formData && fetcher.formData.get('backlogged') === 'true') ||
+    (!fetcher.formData && userSetting);
 
   return (
-    <div>
+    <div
+      className={`backlog-button-container ${
+        appearsBacklogged ? 'backlogged' : ''
+      }`}
+    >
       <fetcher.Form method='post' action={`../edit/${gameID}`}>
         <button
           className='backlog-button'
@@ -48,7 +40,12 @@ export default function BacklogButton({ initialSetting, gameID }: PropTypes) {
           name='backlogged'
           value={userSetting ? 'false' : 'true'}
         >
-          <img src={imgSrc} />
+          <div className='backlog-img-wrapper'>
+            <img
+              src={appearsBacklogged ? book : bookClosed}
+              alt={userSetting ? 'remove from backlog' : 'add to backlog'}
+            />
+          </div>
         </button>
       </fetcher.Form>
     </div>
