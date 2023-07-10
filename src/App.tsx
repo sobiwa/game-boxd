@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import randomLogo from './assets/logo';
 import useUser, { type User } from './hooks/useUser';
-import { type GamesArray } from './mocks/actions';
+import { type GamesArray } from './mocks/searchLoader';
+import SearchBar from './components/SearchBar';
 
 export interface UserGameDataItem {
   gameID: number;
@@ -30,7 +31,7 @@ export default function App() {
   const [gameData, setGameData] = useState<GamesArray | null>(null);
   const [userGameData, setUserGameData] = useState<UserGameData | null>(null);
 
-  console.log(user);
+  const loc = useLocation();
 
   const outletContext: OutletContext = {
     user,
@@ -46,6 +47,7 @@ export default function App() {
         <div className='logo-wrapper'>
           <img src={logo} alt='logo' />
         </div>
+        {!loc.search && <SearchBar />}
       </div>
       <main>
         <Outlet context={outletContext} />

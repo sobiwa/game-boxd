@@ -1,12 +1,13 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import randomLogo from '../assets/logo';
-import { type Result } from '../mocks/actions';
+import { type Result } from '../mocks/searchLoader';
 import PlatformsIcons from './PlatformIcons';
 import BioteRanker from './BioteRanker';
 import BacklogButton from './BacklogButton';
 import { type UserGameDataItem } from '../App';
 import ReleaseDate from './ReleaseDate';
+import metaColor from '../helpers/metaColor';
 
 interface SearchProps {
   game: Result;
@@ -23,10 +24,6 @@ unnecessary reads
 
 export default function SearchResult({ game, initialUserData }: SearchProps) {
   const imgSrc = useRef(game.background_image ?? randomLogo());
-
-  function metaColor(num: number): string {
-    return num > 74 ? '#6c3' : num > 49 ? '#fc3' : '#f00';
-  }
 
   return (
     <div className='search-results--item'>

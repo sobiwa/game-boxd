@@ -70,14 +70,22 @@ body {
 .header {
   height: var(--header-height);
   padding: calc(var(--header-height) * 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.header .search-form--contents {
+  --height: calc(var(--header-height) * 0.5);
 }
 
 .logo-wrapper {
-  height: 100%;
+  width: calc(100px + 10vw);
 }
 
 img {
-  height: 100%;
+  width: 100%;
 }
 
 main {
@@ -577,6 +585,9 @@ input:-webkit-autofill {
 
 .description {
   color: var(--sub-text);
+}
+
+.description-contents {
   position: relative;
 }
 
@@ -612,10 +623,80 @@ input:-webkit-autofill {
 
 .description:has(.fade) .description-expansion-button {
   position: absolute;
-  top: 5.8em;
+  top: 4.3em;
   right: calc(35% - 7.5em);
 }
 
 .description .description-expansion-button:hover {
   opacity: 1;
+}
+
+.game-info-box {
+  margin-top: 1em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1em;
+  align-items: flex-start;
+}
+
+.game-info-box .title {
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.game-info-box--small {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  /* display: flex;
+  flex-wrap: wrap; */
+  gap: 20px;
+  color: var(--sub-text);
+}
+
+.small-item-container {
+  width: fit-content;
+}
+
+.small-item-container div:nth-of-type(2) {
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.game-info-box--small .esrb {
+  width: calc(40px + 0.5vw);
+  height: auto;
+}
+
+.game-info-box--small .metascore {
+  font-weight: 800;
+  font-size: calc(1rem + 0.5vw);
+  padding: 0.3em;
+  width: fit-content;
+  border-radius: 10%;
+  color: white;
+}
+
+.title--sub {
+  color: var(--text);
+  margin-bottom: 0.2em;
+}
+
+.list-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.list-box .list-item {
+  color: var(--sub-text);
+  font-size: 0.9rem;
+  padding: 0.3em;
+  background-color: var(--background-fade);
+  border-radius: 0.5em;
+}
+
+.game-info-box--lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
 }

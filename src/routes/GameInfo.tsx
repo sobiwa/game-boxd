@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Params,
   useLoaderData,
@@ -7,14 +7,27 @@ import {
 } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { OutletContext, type UserGameDataItem as UserData } from '../App';
-import type { SingleGameResponse } from '../mocks/actions';
+import type { SingleGameResponse } from '../mocks/gameInfoLoader';
 import { getUserDataForGame } from '../firebase';
 import PlatformsIcons from '../components/PlatformIcons';
 import ReleaseDate from '../components/ReleaseDate';
+import esrbGenerator from '../helpers/esrbGenerator';
+import metaColor from '../helpers/metaColor';
+import GameInfoList from '../components/GameInfoList';
 
 interface ErrorNote {
   message: string;
   origin: string;
+}
+
+interface ListItem {
+  name: string;
+  id: string;
+}
+
+interface List {
+  descriptor: string;
+  data: Array<ListItem> | Array<{ platform: ListItem }>;
 }
 
 /* had useEffect to access cached data from search results, but search results return
@@ -73,11 +86,30 @@ export default function GameInfo() {
 
   const {
     name,
-    parent_platforms: platforms,
+    parent_platforms: parentPlatforms,
     background_image: bgImg,
     description,
     released,
+    metacritic,
+    platforms,
+    esrb_rating: esrbRating,
+    playtime,
+    developers,
+    publishers,
+    genres,
   } = gameData;
+
+  const lists = [
+    { descriptor: 'Developers', data: developers },
+    { descriptor: 'Publishers', data: publishers },
+    { descriptor: 'Genres', data: genres },
+    { descriptor: 'Platforms', data: platforms },
+  ].filter((item) => item.data);
+
+  const esrbIcon = useMemo(
+    () => (esrbRating?.id ? esrbGenerator(esrbRating.id) : null),
+    [esrbRating]
+  );
 
   return (
     <div className='game-info-page'>
@@ -88,23 +120,69 @@ export default function GameInfo() {
         </div>
       </div>
       <div className='img-container'>
-        <PlatformsIcons platforms={platforms} />
+        {!!parentPlatforms && <PlatformsIcons platforms={parentPlatforms} />}
         <img className='bg-img' src={bgImg} alt={name} />
       </div>
       <div className='game-info-box'>
         {!!description && (
           <div className='description'>
-            Description:
-            <div className={expandDescription ? '' : 'fade'}>
-              {parse(description)}
+            <div className='title'>Description</div>
+            <div className='description-contents'>
+              <div className={expandDescription ? '' : 'fade'}>
+                {parse(description)}
+              </div>
+              <button
+                className='description-expansion-button'
+                type='button'
+                onClick={() => setExpandDescription((prev) => !prev)}
+              >
+                {expandDescription ? 'show less' : 'show more'}
+              </button>
             </div>
-            <button
-              className='description-expansion-button'
-              type='button'
-              onClick={() => setExpandDescription((prev) => !prev)}
-            >
-              {expandDescription ? 'show less' : 'show more'}
-            </button>
+          </div>
+        )}
+        <div className='game-info-box--small'>
+          {!!playtime && (
+            <div>
+              <div className='small-item-container'>
+                <div className='title--sub'>Average Playtime</div>
+                <div>{`${playtime} hours`}</div>
+              </div>
+            </div>
+          )}
+          {!!metacritic && (
+            <div>
+              <div className='small-item-container'>
+                <div className='title--sub'>MetaScore</div>
+                <div
+                  style={{ backgroundColor: metaColor(metacritic) }}
+                  className='metascore'
+                >
+                  {metacritic}
+                </div>
+              </div>
+            </div>
+          )}
+          {!!esrbRating && (
+            <div>
+              <div className='small-item-container'>
+                <div className='title--sub'>Age Rating</div>
+                <div>
+                  <img className='esrb' src={esrbIcon} alt={esrbRating.name} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        {lists.length > 0 && (
+          <div className='game-info-box--lists'>
+            {lists.map((item) => (
+              <GameInfoList
+                key={`${item.descriptor}-list`}
+                title={item.descriptor}
+                items={item.data}
+              />
+            ))}
           </div>
         )}
       </div>

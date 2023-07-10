@@ -4,7 +4,8 @@ import { createRoot } from 'react-dom/client';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import Search, { loader as searchLoader } from './routes/Search';
-import { loader as mockSearchLoader, mockGameInfoLoader } from './mocks/actions';
+import mockSearchLoader from './mocks/searchLoader';
+import mockGameInfoLoader from './mocks/gameInfoLoader';
 import editUserGameData from './routes/editUserGameData';
 import GameInfo, { loader as gameInfoLoader } from './routes/GameInfo';
 
