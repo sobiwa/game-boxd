@@ -58,7 +58,7 @@ export async function getUserDataForGame(gameID: number | string) {
   const q = query(
     userGamesRef,
     where('userID', '==', auth.currentUser?.uid),
-    where('gameID', '==', gameID)
+    where('gameID', '==', +gameID)
   );
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) {
