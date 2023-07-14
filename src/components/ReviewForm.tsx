@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useFetcher } from 'react-router-dom';
 import useProcessing from '../hooks/useProcessing';
+import bioteIcon from '../assets/icons/biotes/biote.svg';
+import useUpdateListener from '../hooks/useUpdateListener';
 
 interface PropTypes {
   gameID: number;
@@ -14,6 +16,10 @@ export default function ReviewForm({ gameID, initialValue }: PropTypes) {
   function handleReviewChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setReview(e.target.value);
   }
+
+  const newUpdate = useUpdateListener(fetcher.data?.review);
+
+  console.log(newUpdate);
 
   useEffect(() => {
     setReview(initialValue);
@@ -42,6 +48,11 @@ export default function ReviewForm({ gameID, initialValue }: PropTypes) {
           className={`review-submit ${processing ? 'processing' : ''}`}
         >
           Submit
+          {newUpdate && (
+            <div className='update-biote-wrapper'>
+              <img className='update-biote' src={bioteIcon} alt='' />
+            </div>
+          )}
         </button>
       </div>
     </fetcher.Form>

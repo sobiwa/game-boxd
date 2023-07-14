@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useOutletContext, useFetcher } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { OutletContext, type UserGameDataItem as UserData } from '../App';
 import { getUserDataForGame } from '../firebase';
 import BacklogButton from './BacklogButton';
@@ -25,7 +25,7 @@ export default function UserGameData({ gameID }: PropTypes) {
 
   useEffect(() => {
     async function fetchUserData() {
-      if (!gameID) return;
+      if (!gameID || !user) return;
       try {
         const data = await getUserDataForGame(gameID);
         if (data === 'no user data') return;
@@ -38,6 +38,7 @@ export default function UserGameData({ gameID }: PropTypes) {
           if (retrievedData.review) setReview(retrievedData.review);
         }
       } catch (err) {
+        console.log(err);
         setError({ message: (err as Error).message, origin: 'fetchUserData' });
       }
     }
@@ -59,6 +60,7 @@ export default function UserGameData({ gameID }: PropTypes) {
         <BioteRanker gameID={+gameID} initialRating={rating} label />
       </div>
       <ReviewForm gameID={+gameID} initialValue={review} />
+      {error && <div className='error-bubble'>{error.message}</div>}
     </div>
   );
 }

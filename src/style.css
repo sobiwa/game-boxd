@@ -541,7 +541,7 @@ input:-webkit-autofill {
 }
 
 .temp {
-  opacity: 0.8;
+  /* opacity: 0.8; */
 }
 
 .temp .rank-biote {
@@ -822,6 +822,7 @@ input:-webkit-autofill {
   letter-spacing: 0.05em;
   overflow: hidden;
   isolation: isolate;
+  transition: background-color 0.2s;
 }
 
 @keyframes processingGrow {
@@ -832,7 +833,6 @@ input:-webkit-autofill {
   to {
     scale: 1.5;
   }
-  
 }
 
 .review-submit.processing::before {
@@ -851,9 +851,13 @@ input:-webkit-autofill {
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   /* border: 1px solid var(--background-fade); */
-  background: radial-gradient(transparent, 60%, var(--primary-dark), transparent);
+  background: radial-gradient(
+    transparent,
+    60%,
+    var(--primary-dark),
+    transparent
+  );
   z-index: -1;
-
 }
 
 .user-game-data > *:not(:first-child) {
@@ -878,6 +882,7 @@ input:-webkit-autofill {
 }
 
 .temp.backlog-button::before {
+  opacity: 0.8;
   position: absolute;
   content: '';
   height: 100%;
@@ -885,9 +890,9 @@ input:-webkit-autofill {
   background: linear-gradient(
     to right,
     transparent,
-    20%,
-    var(--button-background) 50%,
-    80%,
+    10%,
+    var(--button-background),
+    90%,
     transparent
   );
   top: 0;
@@ -926,4 +931,39 @@ input:-webkit-autofill {
 
 .user-game-data--item:hover .value-display {
   display: block;
+}
+
+.review-submit:has(img.update-biote) {
+  /* background-color: var(--primary-dark); */
+}
+
+@keyframes bioteRunner {
+  from {
+    right: 100%;
+  }
+
+  to {
+    left: 100%;
+  }
+}
+
+.update-biote-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  animation-name: processing;
+  animation-duration: 0.8s;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+  z-index: -1;
+  animation-fill-mode: both;
+  background: linear-gradient(to right, transparent, var(--primary-dark), transparent);
+}
+
+.update-biote {
+  height: 100%;
+  width: auto;
+  margin-inline: auto;
 }
