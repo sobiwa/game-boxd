@@ -1,9 +1,11 @@
 import { Params } from 'react-router-dom';
 import { updateUserGameData } from '../firebase';
 
-// function delay(ms: number) {
-//   return new Promise(resolve => setTimeout(resolve, ms));
-// }
+function delay(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 // same as user data, but boolean is string because of formData()
 interface AlteredData {
@@ -21,6 +23,7 @@ export default async function editUserGameData({
   request: Request;
   params: Params;
 }) {
+  // await delay(3000);
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
   const { gameID } = params;
