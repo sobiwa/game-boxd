@@ -22,7 +22,6 @@ export default function SliderBlock({
   return (
     <div className='slider-block'>
       <button
-        name='backlogDegree'
         onMouseEnter={() => {
           setHoverDegree(position);
         }}

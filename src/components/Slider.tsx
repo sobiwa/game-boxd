@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher, useSubmit } from 'react-router-dom';
 import SliderBlock from './SliderBlock';
 import useProcessing from '../hooks/useProcessing';
 import useUpdateListener from '../hooks/useUpdateListener';
@@ -11,7 +11,9 @@ interface PropTypes {
 }
 
 export default function Slider({ gameID, degree, setDegree }: PropTypes) {
-  // const active = useRef(false);
+  // TODO: fix bug where number stops working after hovering buttons
+
+  const formRef = useRef<null | HTMLFormElement>(null);
 
   const [active, setActive] = useState(false);
   const [hoverDegree, setHoverDegree] = useState(degree);
@@ -48,11 +50,6 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
 
   const degreeAppearance = tempRating ?? degree;
 
-
-  function handleButtonSubmit(e: React.MouseEvent<HTMLButtonElement>) {
-    console.log(e.target.value)
-  }
-
   const blocks = [];
   for (let i = 1; i <= 100; i += 1) {
     blocks.push(
@@ -63,17 +60,30 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
         degree={degreeAppearance}
         hoverDegree={hoverDegree}
         setHoverDegree={setHoverDegree}
-        handleSubmit={(e) => handleButtonSubmit(e)}
       />
     );
   }
 
+  function handleNumberBlur() {
+    if (
+      fetcher.formData ||
+      Number(fetcher.data?.backlogDegree) === hoverDegree
+    ) {
+      return;
+    }
+    if (formRef.current) {
+      fetcher.submit(formRef.current);
+    }
+    unhover();
+  }
+
   return (
     <div className={`slider ${processing ? 'processing' : ''}`}>
-      <fetcher.Form method='post' action={`../edit/${gameID}`}>
+      <fetcher.Form ref={formRef} method='post' action={`../edit/${gameID}`}>
         <input
+          name='backlogDegree'
           onFocus={hover}
-          onBlur={unhover}
+          onBlur={handleNumberBlur}
           onChange={(e) => setHoverDegree(+e.target.value)}
           className='slider-number'
           type='number'
