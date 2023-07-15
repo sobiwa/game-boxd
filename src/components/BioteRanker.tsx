@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { useFetcher } from 'react-router-dom';
 import Biote from './Biote';
 import useProcessing from '../hooks/useProcessing';
+import useUpdateListener from '../hooks/useUpdateListener';
 
 interface PropTypes {
   gameID: number;
@@ -54,6 +55,26 @@ export default function BioteRanker({
 
   const processing = useProcessing(fetcher.formData);
 
+  const newUpdate = useUpdateListener(fetcher.data?.rating);
+
+  const biotes = [];
+  for (let i = 1; i < 6; i += 1) {
+    biotes.push(
+      <div
+        key={`${gameID}-biote-${i}`}
+        className={`biote-wrapper ${newUpdate ? 'jump' : ''}`}
+      >
+        <Biote
+          rating={ratingAppearance}
+          rank={i}
+          active={active.current}
+          hoverRating={hoverRating}
+          setHoverRating={setHoverRating}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       {label && (
@@ -71,41 +92,7 @@ export default function BioteRanker({
         onPointerLeave={unhover}
       >
         <fetcher.Form method='post' action={`../edit/${gameID}`}>
-          <Biote
-            rating={ratingAppearance}
-            rank={1}
-            active={active.current}
-            hoverRating={hoverRating}
-            setHoverRating={setHoverRating}
-          />
-          <Biote
-            rating={ratingAppearance}
-            rank={2}
-            active={active.current}
-            hoverRating={hoverRating}
-            setHoverRating={setHoverRating}
-          />
-          <Biote
-            rating={ratingAppearance}
-            rank={3}
-            active={active.current}
-            hoverRating={hoverRating}
-            setHoverRating={setHoverRating}
-          />
-          <Biote
-            rating={ratingAppearance}
-            rank={4}
-            active={active.current}
-            hoverRating={hoverRating}
-            setHoverRating={setHoverRating}
-          />
-          <Biote
-            rating={ratingAppearance}
-            rank={5}
-            active={active.current}
-            hoverRating={hoverRating}
-            setHoverRating={setHoverRating}
-          />
+          {biotes}
         </fetcher.Form>
       </div>
     </>

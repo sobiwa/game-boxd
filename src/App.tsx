@@ -11,6 +11,7 @@ export interface UserGameDataItem {
   gameID: number;
   userID?: string;
   backlogged?: boolean;
+  backlogDegree?: number;
   rating?: number;
   review?: string;
 }

@@ -19,6 +19,7 @@ export default function UserGameData({ gameID }: PropTypes) {
   const { user }: OutletContext = useOutletContext();
   // const [userData, setUserData] = useState<UserData | null>(null);
   const [backlogged, setBacklogged] = useState(false);
+  const [backlogDegree, setBacklogDegree] = useState(0);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [error, setError] = useState<ErrorNote | null>(null);
@@ -36,6 +37,8 @@ export default function UserGameData({ gameID }: PropTypes) {
           if (retrievedData.backlogged) setBacklogged(retrievedData.backlogged);
           if (retrievedData.rating) setRating(retrievedData.rating);
           if (retrievedData.review) setReview(retrievedData.review);
+          if (retrievedData.backlogDegree)
+            setBacklogDegree(retrievedData.backlogDegree);
         }
       } catch (err) {
         console.log(err);
@@ -50,11 +53,13 @@ export default function UserGameData({ gameID }: PropTypes) {
 
   return (
     <div className='user-game-data'>
-      <div className='backlog-button-container user-game-data--item'>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label>
-          <BacklogButton gameID={+gameID} initialSetting={backlogged} label />
-        </label>
+      <div className='user-game-data--item'>
+        <BacklogButton
+          gameID={+gameID}
+          initialSetting={backlogged}
+          initialBacklogDegree={backlogDegree}
+          label
+        />
       </div>
       <div className='ranker-container user-game-data--item'>
         <BioteRanker gameID={+gameID} initialRating={rating} label />

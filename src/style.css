@@ -160,17 +160,12 @@ main {
   text-decoration: underline;
 }
 
-.backlog-button-container {
-  /* width: fit-content; */
-}
-
 .backlog-button {
-  aspect-ratio: 1.32 / 1;
+  aspect-ratio: 1.25 / 1;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   position: relative;
-  overflow: hidden;
   transition: opacity 0.2s;
   background-color: var(--button-background);
 }
@@ -178,6 +173,76 @@ main {
 .backlog-img-wrapper {
   height: 100%;
   width: auto;
+  position: relative;
+}
+
+@keyframes swirl {
+  0% {
+    rotate: 0deg;
+    scale: 1;
+  }
+
+  50% {
+    rotate: 360deg;
+    scale: 0.8;
+  }
+
+  100% {
+    rotate: 720deg;
+    scale: 0;
+  }
+}
+
+@keyframes counter-rotate {
+  0% {
+    scale: 0;
+    rotate: 360deg;
+  }
+  10% {
+    scale: 1;
+  }
+
+  50% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: -360deg;
+  }
+}
+
+.biote-swirl-wrapper {
+  --duration: 1.3s;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  inset: 0;
+  margin: auto;
+  animation-name: swirl;
+  animation-duration: var(--duration);
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+.backlogged .biote-swirl-wrapper {
+  animation-direction: reverse;
+  margin-left: auto;
+}
+
+.biote-swirl-wrapper .biote-swirl {
+  width: calc(var(--icon) * 0.7);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  display: block;
+  animation-name: counter-rotate;
+  animation-duration: var(--duration);
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+.backlogged .biote-swirl {
+  animation-direction: reverse;
 }
 
 @container search (min-width: 0px) {
@@ -540,10 +605,6 @@ input:-webkit-autofill {
   }
 }
 
-.temp {
-  /* opacity: 0.8; */
-}
-
 .temp .rank-biote {
   --delay: 0.1s;
   animation-name: temp;
@@ -552,16 +613,51 @@ input:-webkit-autofill {
   animation-iteration-count: infinite;
 }
 
-.temp .rank-biote:nth-of-type(2) {
-  animation-delay: calc(var(--delay));
+.temp .biote-wrapper:nth-of-type(2) .rank-biote {
+  animation-delay: var(--delay);
 }
-.temp .rank-biote:nth-of-type(3) {
+.temp .biote-wrapper:nth-of-type(3) .rank-biote {
   animation-delay: calc(var(--delay) * 2);
 }
-.temp .rank-biote:nth-of-type(4) {
+.temp .biote-wrapper:nth-of-type(4) .rank-biote {
   animation-delay: calc(var(--delay) * 3);
 }
-.temp .rank-biote:nth-of-type(5) {
+.temp .biote-wrapper:nth-of-type(5) .rank-biote {
+  animation-delay: calc(var(--delay) * 4);
+}
+
+@keyframes jump {
+  0% {
+    translate: 0;
+  }
+
+  50% {
+    translate: 0 -20%;
+    opacity: 0.8;
+  }
+
+  100% {
+    translate: 0;
+  }
+}
+
+.jump.biote-wrapper {
+  --delay: 50ms;
+  animation-name: jump;
+  animation-duration: 0.2s;
+  /* animation-timing-function: linear; */
+}
+
+.jump.biote-wrapper:nth-of-type(2) {
+  animation-delay: var(--delay);
+}
+.jump.biote-wrapper:nth-of-type(3) {
+  animation-delay: calc(var(--delay) * 2);
+}
+.jump.biote-wrapper:nth-of-type(4) {
+  animation-delay: calc(var(--delay) * 3);
+}
+.jump.biote-wrapper:nth-of-type(5) {
   animation-delay: calc(var(--delay) * 4);
 }
 
@@ -866,7 +962,7 @@ input:-webkit-autofill {
 
 .user-game-data .backlog-button {
   height: var(--icon);
-  padding: 2%;
+  padding: calc(var(--icon) * 0.1);
   border-radius: 4px;
   --button-background: var(--background-fade);
   background-color: var(--button-background);
@@ -881,10 +977,18 @@ input:-webkit-autofill {
   }
 }
 
-.temp.backlog-button::before {
-  opacity: 0.8;
+.processing-animation-wrapper {
+  z-index: 1;
+  top: 0;
+  left: 0;
   position: absolute;
-  content: '';
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.processing-animation {
+  opacity: 0.8;
   height: 100%;
   width: 100%;
   background: linear-gradient(
@@ -895,8 +999,6 @@ input:-webkit-autofill {
     90%,
     transparent
   );
-  top: 0;
-  left: 0;
   animation-name: processing;
   animation-duration: 1s;
   animation-iteration-count: infinite;
@@ -905,6 +1007,89 @@ input:-webkit-autofill {
 
 .user-game-data .backlog-button:hover {
   --button-background: var(--background);
+}
+
+.slider-button {
+  width: calc(var(--icon) * 0.4);
+  height: var(--icon);
+  padding: calc(var(--icon) * 0.1);
+  /* align-self: flex-end; */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.slider-button:hover {
+  background-color: var(--background);
+}
+
+.slider-button img {
+  display: block;
+  width: 100%;
+  rotate: 180deg;
+  transition: rotate 0.2s;
+}
+
+.slider-button.open img {
+  rotate: 90deg;
+}
+
+.slider {
+  z-index: 1;
+  position: absolute;
+  background-color: var(--background);
+  top: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  width: 100%;
+  box-shadow: 1px 1px 5px black;
+}
+
+.slider-number {
+  background-color: var(--background);
+  appearance: none;
+  border: none;
+  font-family: inherit;
+  color: var(--purple);
+  margin-left: auto;
+  display: block;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.slider-number:focus-visible {
+  outline: 1px solid var(--purple);
+}
+
+.slider-number::selection {
+  background-color: var(--background-fade);
+  color: var(--text);
+}
+
+.block-container {
+  display: grid;
+  width: 100%;
+  height: var(--icon);
+  grid-template-columns: repeat(100, 1fr);
+}
+
+.slider-block {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.slider-block-button {
+  width: 100%;
+  height: 100%;
+}
+
+.slider-block-img {
+  width: 100%;
+  margin-block: auto;
+  display: block;
 }
 
 .user-game-data .title {
@@ -927,6 +1112,10 @@ input:-webkit-autofill {
   font-size: 0.9rem;
   border-radius: 4px;
   display: none;
+}
+
+.user-game-data--item {
+  width: min(100vw, 300px);
 }
 
 .user-game-data--item:hover .value-display {
@@ -959,11 +1148,23 @@ input:-webkit-autofill {
   animation-timing-function: linear;
   z-index: -1;
   animation-fill-mode: both;
-  background: linear-gradient(to right, transparent, var(--primary-dark), transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--primary-dark),
+    transparent
+  );
 }
 
 .update-biote {
   height: 100%;
   width: auto;
   margin-inline: auto;
+}
+
+.backlog-button-container {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  position: relative;
 }
