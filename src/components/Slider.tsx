@@ -3,6 +3,7 @@ import { useFetcher, useSubmit } from 'react-router-dom';
 import SliderBlock from './SliderBlock';
 import useProcessing from '../hooks/useProcessing';
 import useUpdateListener from '../hooks/useUpdateListener';
+import infoIcon from '../assets/icons/info.svg';
 
 interface PropTypes {
   gameID: number;
@@ -14,9 +15,11 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
   // TODO: fix bug where number stops working after hovering buttons
 
   const formRef = useRef<null | HTMLFormElement>(null);
+  const numberRef = useRef<null | HTMLInputElement>(null);
 
   const [active, setActive] = useState(false);
   const [hoverDegree, setHoverDegree] = useState(degree);
+  const [showInfo, setShowInfo] = useState(false);
 
   const fetcher = useFetcher();
 
@@ -35,7 +38,9 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
   }
 
   function unhover() {
-    setActive(false);
+    if (numberRef.current && numberRef.current !== document.activeElement) {
+      setActive(false);
+    }
     setHoverDegree(degree);
   }
 
@@ -74,13 +79,38 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
     if (formRef.current) {
       fetcher.submit(formRef.current);
     }
-    unhover();
+    setActive(false);
   }
 
   return (
-    <div className={`slider ${processing ? 'processing' : ''}`}>
-      <fetcher.Form ref={formRef} method='post' action={`../edit/${gameID}`}>
+    <div className='slider'>
+      <fetcher.Form
+        className='slider-form'
+        ref={formRef}
+        method='post'
+        action={`../edit/${gameID}`}
+      >
+        <div
+          className='slider-title'
+          onPointerLeave={() => setShowInfo(false)}
+          onPointerCancel={() => setShowInfo(false)}
+        >
+          <div>Interest</div>
+          <button
+            type='button'
+            className='info-button'
+            onClick={() => setShowInfo((prev) => !prev)}
+          >
+            <img src={infoIcon} alt='info' />
+          </button>
+          {showInfo && (
+            <div className='info-box'>
+              Likelihood of playing. Helps with backlog organization.
+            </div>
+          )}
+        </div>
         <input
+          ref={numberRef}
           name='backlogDegree'
           onFocus={hover}
           onBlur={handleNumberBlur}
@@ -91,8 +121,9 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
           max='100'
           value={active ? hoverDegree : degreeAppearance}
         />
+
         <div
-          className='block-container'
+          className={`block-container ${newUpdate ? 'update' : ''}`}
           onPointerEnter={hover}
           onPointerCancel={unhover}
           onPointerLeave={unhover}
@@ -100,6 +131,11 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
           onBlur={unhover}
         >
           {blocks}
+          {processing && (
+            <div className='processing-animation-wrapper'>
+              <div className='processing-animation' />
+            </div>
+          )}
         </div>
       </fetcher.Form>
     </div>

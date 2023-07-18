@@ -50,6 +50,7 @@ export default function SearchResult({ game, initialUserData }: SearchProps) {
         <BioteRanker initialRating={initialUserData?.rating} gameID={game.id} />
         <BacklogButton
           initialSetting={initialUserData?.backlogged}
+          initialBacklogDegree={initialUserData?.backlogDegree ?? 0}
           gameID={game.id}
         />
       </div>

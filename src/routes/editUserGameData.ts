@@ -8,12 +8,45 @@ function delay(ms: number) {
 }
 
 // same as user data, but boolean is string because of formData()
+interface IncomingData {
+  userID?: string;
+  backlogged?: string;
+  backlogDegree?: string;
+  rating?: string;
+  review?: string;
+}
+
 interface AlteredData {
   gameID: number;
   userID?: string;
-  backlogged?: string | boolean;
-  rating?: number;
+  backlogged?: boolean;
+  backlogDegree?: number;
+  rating?: number | null;
   review?: string;
+}
+
+function convertData(rawData: IncomingData, gameID: number): AlteredData {
+  const returnObject: AlteredData = {
+    gameID: +gameID,
+    ...rawData,
+  } as AlteredData;
+
+  console.log(typeof rawData.backlogDegree);
+
+  if (rawData.backlogged) {
+    returnObject.backlogged = rawData.backlogged === 'true';
+  }
+  if (rawData.backlogDegree) {
+    returnObject.backlogDegree = +rawData.backlogDegree;
+  }
+  if (rawData.rating) {
+    if (rawData.rating === 'null') {
+      returnObject.rating = null;
+    } else {
+      returnObject.rating = +rawData.rating;
+    }
+  }
+  return returnObject;
 }
 
 export default async function editUserGameData({
@@ -23,18 +56,12 @@ export default async function editUserGameData({
   request: Request;
   params: Params;
 }) {
-  await delay(2000);
+  // await delay(2000);
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
   const { gameID } = params;
   if (!gameID) return 'Error: no game id';
-  const newUpdates: AlteredData = { ...updates, gameID: +gameID };
-  if (newUpdates.backlogged) {
-    newUpdates.backlogged = newUpdates.backlogged === 'true';
-  }
-  if (newUpdates.rating) {
-    newUpdates.rating = +newUpdates.rating;
-  }
+  const newUpdates = convertData(updates, +gameID);
   console.log(newUpdates);
   try {
     await updateUserGameData(newUpdates);

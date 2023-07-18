@@ -35,8 +35,9 @@ import {
 interface UserGameData {
   gameID: number;
   userID?: string;
-  rating?: number;
+  rating?: number | null;
   backlogged?: boolean | string;
+  backlogDegree?: number;
   review?: string;
 }
 

@@ -7,6 +7,7 @@ import useUpdateListener from '../hooks/useUpdateListener';
 import bioteIcon from '../assets/icons/biotes/biote.svg';
 import arrowIcon from '../assets/icons/arrow.svg';
 import Slider from './Slider';
+import InterestDisplay from './InterestDisplay';
 
 interface PropTypes {
   gameID: number;
@@ -94,19 +95,26 @@ export default function BacklogButton({
             </div>
           </button>
         </fetcher.Form>
-        <button
-          type='button'
-          className={`slider-button ${showSlider ? 'open' : ''}`}
-          onClick={() => setShowSlider((prev) => !prev)}
-        >
-          <img src={arrowIcon} alt='slider' />
-        </button>
-        {showSlider && (
-          <Slider
-            gameID={gameID}
-            degree={backlogDegree}
-            setDegree={setBacklogDegree}
-          />
+        {appearsBacklogged && backlogDegree > 0 && (
+          <InterestDisplay interest={backlogDegree} />
+        )}
+        {label && appearsBacklogged && (
+          <>
+            <button
+              type='button'
+              className={`slider-button ${showSlider ? 'open' : ''}`}
+              onClick={() => setShowSlider((prev) => !prev)}
+            >
+              <img src={arrowIcon} alt='slider' />
+            </button>
+            {showSlider && (
+              <Slider
+                gameID={gameID}
+                degree={backlogDegree}
+                setDegree={setBacklogDegree}
+              />
+            )}
+          </>
         )}
       </div>
     </>

@@ -22,10 +22,11 @@
   --background-fade: hsl(228, 5%, 25%);
   --text: #e2e2e2;
   --sub-text: hsl(0, 0%, 75%);
-  --primary: hsl(136, 40%, 65%);
+  --primary: #82c995;
   --primary-dark: hsl(136, 40%, 45%);
   --pink: #ef5d60;
   --purple: #ae6b9c;
+  --shadow: 1px 1px 5px black;
 }
 
 html {
@@ -275,7 +276,7 @@ main {
 
   .backlog-button {
     margin: calc(var(--icon) * 0.2);
-    height: calc(var(--icon) * 1.2);
+    height: var(--icon);
   }
 
   .meta-score {
@@ -292,7 +293,7 @@ main {
 }
 
 .search-results--item:hover .backlog-button-container {
-  display: block;
+  display: flex;
 }
 
 .search-results--item:hover {
@@ -569,31 +570,54 @@ input:-webkit-autofill {
   font-weight: 800;
   padding: 3px;
   color: white;
-  /* font-size: min(1rem, 18px); */
   width: fit-content;
   letter-spacing: 0.05em;
   border-radius: 0.3rem;
   position: absolute;
   top: 0;
   left: 0;
-  /* scale: 0.6; */
   transition: 0.1s;
-  /* box-shadow: 1px 1px 5px black; */
 }
 
 .search-results--item:hover .meta-score {
   opacity: 1;
-  box-shadow: 1px 1px 5px black;
-  /* scale: 1; */
-  /* font-size: min(1.5rem, 24px); */
+  box-shadow: var(--shadow);
 }
 
 .biote-ranker {
-  /* height: 100%; */
-  /* max-height: 30px; */
   display: flex;
-  width: fit-content;
+  width: 100%;
   transition: opacity 0.1s;
+}
+
+.biote-ranker:hover .nullify-button {
+  display: block;
+}
+
+.biote-ranker .nullify-button {
+  display: none;
+  --size: calc(var(--icon) * 0.7);
+  height: var(--size);
+  width: var(--size);
+  border: 0.5px solid var(--primary);
+  border-radius: 50%;
+  padding: calc(var(--icon) * 0.2);
+  opacity: 1;
+  background-image: url('./assets/icons/x-empty.svg');
+  background-size: calc(var(--size) * 0.5);
+  background-repeat: no-repeat;
+  background-position: center;
+  align-self: center;
+  transition: 0.3s;
+  margin-left: calc(var(--icon) * 0.2);
+}
+
+.biote-ranker .nullify-button:hover {
+  background-image: url('./assets/icons/x.svg');
+}
+
+.biote-ranker .nullify-button img {
+  height: 100%;
 }
 
 @keyframes temp {
@@ -662,6 +686,10 @@ input:-webkit-autofill {
 }
 
 .biote-ranker form {
+  display: flex;
+}
+
+.biotes-container {
   display: flex;
 }
 
@@ -859,11 +887,14 @@ input:-webkit-autofill {
 }
 
 .user-game-data {
-  /* flex-grow: 1; */
+  flex-grow: 1;
+  max-width: 600px;
   align-self: flex-start;
   background-color: var(--background-fade);
-  padding: calc(16px + 2vw);
+  padding: 20px;
+  padding-bottom: 50px;
   color: var(--primary);
+  border-radius: 4px;
   /* margin-block: auto; */
   --icon: calc(40px + 0.5vw);
 }
@@ -886,7 +917,7 @@ input:-webkit-autofill {
   background-color: var(--background-fade);
   border: 1px solid var(--primary);
   height: 6rem;
-  max-width: 800px;
+  min-height: 3.6em;
   resize: vertical;
   border-radius: 3px;
 }
@@ -1013,6 +1044,7 @@ input:-webkit-autofill {
   width: calc(var(--icon) * 0.4);
   height: var(--icon);
   padding: calc(var(--icon) * 0.1);
+  margin-left: calc(var(--icon) * 0.1);
   /* align-self: flex-end; */
   display: flex;
   align-items: flex-end;
@@ -1043,7 +1075,59 @@ input:-webkit-autofill {
   padding: 8px;
   border-radius: 4px;
   width: 100%;
-  box-shadow: 1px 1px 5px black;
+  box-shadow: var(--shadow);
+}
+
+.slider-title {
+  color: var(--purple);
+  margin-block: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.slider .info-button {
+  height: 25px;
+  aspect-ratio: 1;
+  padding: 5px;
+  border-radius: 50%;
+  visibility: hidden;
+  opacity: 0.8;
+}
+
+.slider-title:hover .info-button {
+  visibility: visible;
+}
+
+.slider .info-button:hover {
+  opacity: 1;
+}
+
+.slider .info-button img {
+  height: 100%;
+}
+
+.slider-title .info-box {
+  position: absolute;
+  font-size: 0.8rem;
+  top: calc(100% + 5px);
+  left: 5px;
+  background-color: var(--primary);
+  z-index: 1;
+  color: var(--background);
+  padding: 6px;
+  border-radius: 0 4px 4px 4px;
+  box-shadow: var(--shadow);
+}
+
+.slider-title .info-box::before {
+  content: '';
+  position: absolute;
+  border: 10px solid transparent;
+  border-left-color: var(--primary);
+  top: -8px;
+  left: 0;
 }
 
 .slider-number {
@@ -1067,12 +1151,34 @@ input:-webkit-autofill {
   color: var(--text);
 }
 
-.block-container {
+.slider-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.slider .block-container {
   display: grid;
   width: 100%;
   height: var(--icon);
   grid-template-columns: repeat(100, 1fr);
-  /* gap: 0.5px; */
+  position: relative;
+  --button-background: var(--background);
+  grid-area: 2 / 1 / 3 / 3;
+}
+
+@keyframes flip {
+  from {
+  }
+
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+.block-container.update .slider-block {
+  animation-name: flip;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
 }
 
 .slider-block {
@@ -1089,7 +1195,41 @@ input:-webkit-autofill {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* gap: 0.5px; */
+}
+
+.block-couple {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5px;
+}
+
+/* alt to using SVGs */
+
+.block {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 20%;
+  background-color: var(--purple);
+  /* border: 0.5px solid var(--purple); */
+}
+
+.block::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background-color: var(--background);
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 20%;
+  scale: 0;
+  transition: scale 0.2s;
+}
+
+.block.empty::before {
+  scale: 1;
 }
 
 .slider-block-img {
@@ -1100,9 +1240,6 @@ input:-webkit-autofill {
 .user-game-data .title {
   margin-bottom: 0.3em;
   width: fit-content;
-}
-
-.user-game-data .title {
   position: relative;
 }
 
@@ -1119,16 +1256,8 @@ input:-webkit-autofill {
   display: none;
 }
 
-.user-game-data--item {
-  width: min(100vw, 300px);
-}
-
 .user-game-data--item:hover .value-display {
   display: block;
-}
-
-.review-submit:has(img.update-biote) {
-  /* background-color: var(--primary-dark); */
 }
 
 @keyframes bioteRunner {
@@ -1169,7 +1298,33 @@ input:-webkit-autofill {
 
 .backlog-button-container {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.user-game-data .backlog-button-container {
+  width: 100%;
+  /* gap: 4px; */
   align-items: center;
   position: relative;
+}
+
+.interest-display {
+  width: calc(var(--icon) * 0.1);
+  height: calc(var(--icon) * 0.7);
+  display: grid;
+  grid-template-rows: repeat(auto-fit, 1fr);
+  border: 0.5px solid var(--purple);
+  border-radius: 1px;
+  rotate: 180deg;
+}
+
+.interest-display .display-block {
+  width: 100%;
+  height: 100%;
+  background-color: var(--purple);
+}
+
+.interest-display .display-block.empty {
+  background-color: transparent;
 }

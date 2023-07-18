@@ -23,7 +23,8 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",
     "@typescript-eslint/no-explicit-any": 0,
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "react/require-default-props": "off"
   },
   "settings": {
     "react": {

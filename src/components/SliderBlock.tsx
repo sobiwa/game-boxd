@@ -18,9 +18,15 @@ export default function SliderBlock({
 }: PropTypes) {
   const degreeVisual = active ? hoverDegree : degree ?? 0;
   const imgSrc = +degreeVisual >= position ? blockIcon : blockEmptyIcon;
+  const style = {
+    backgroundColor: +degreeVisual >= position ? '#ae6b9c' : 'transparent',
+  };
 
   return (
-    <div className='slider-block'>
+    <div
+      className='slider-block'
+      style={{ animationDelay: `${(position - 1) * 3}ms` }}
+    >
       <button
         onMouseEnter={() => {
           setHoverDegree(position);
@@ -44,6 +50,11 @@ export default function SliderBlock({
           src={imgSrc}
           alt=''
         />
+
+        {/* <div className='block-couple'>
+          <div className={`block ${+degreeVisual < position ? 'empty' : ''}`} />
+          <div className={`block ${+degreeVisual < position ? 'empty' : ''}`} />
+        </div> */}
       </button>
     </div>
   );

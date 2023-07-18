@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFetcher } from 'react-router-dom';
 import Biote from './Biote';
 import useProcessing from '../hooks/useProcessing';
@@ -6,8 +6,8 @@ import useUpdateListener from '../hooks/useUpdateListener';
 
 interface PropTypes {
   gameID: number;
-  initialRating: number | undefined;
-  label: boolean;
+  initialRating: number | null | undefined;
+  label?: boolean;
 }
 
 export default function BioteRanker({
@@ -41,13 +41,13 @@ export default function BioteRanker({
   if (fetcher.formData) {
     const newRating = fetcher.formData.get('rating');
     if (newRating) {
-      tempRating = +newRating;
+      tempRating = newRating === 'null' ? 0 : +newRating;
     }
   }
 
   useEffect(() => {
-    if (fetcher?.data?.rating) {
-      setUserRating(fetcher.data.rating);
+    if (fetcher?.data?.rating !== undefined) {
+      setUserRating(fetcher.data.rating ?? 0);
     }
   }, [fetcher]);
 
@@ -85,14 +85,25 @@ export default function BioteRanker({
           </span>
         </div>
       )}
-      <div
-        className={`biote-ranker ${processing ? 'temp' : ''}`}
-        onPointerEnter={hover}
-        onPointerCancel={unhover}
-        onPointerLeave={unhover}
-      >
+      <div className={`biote-ranker ${processing ? 'temp' : ''}`}>
         <fetcher.Form method='post' action={`../edit/${gameID}`}>
-          {biotes}
+          <div
+            className='biotes-container'
+            onPointerEnter={hover}
+            onPointerCancel={unhover}
+            onPointerLeave={unhover}
+          >
+            {biotes}
+          </div>
+          {ratingAppearance > 0 && (
+            <button
+              name='rating'
+              value='null'
+              type='submit'
+              className='nullify-button'
+              aria-label='delete rating'
+            />
+          )}
         </fetcher.Form>
       </div>
     </>
