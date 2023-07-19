@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import randomLogo from '../assets/logo';
 import { type Result } from '../mocks/searchLoader';
@@ -31,12 +31,22 @@ export default function SearchResult({
 }: SearchProps) {
   const imgSrc = useRef(game.background_image ?? randomLogo());
 
+  const [imgLoading, setImgLoading] = useState(true);
+
   return (
     <div className='search-results--item'>
       <div className='search-results--item-contents'>
         <Link className='search-results--link' to={`../games/${game.id}`}>
-          <div className='search-results--image-wrapper'>
-            <img src={imgSrc.current} alt={game.name} />
+          <div
+            className={`search-results--image-wrapper ${
+              imgLoading ? 'image-loading' : ''
+            }`}
+          >
+            <img
+              src={imgSrc.current}
+              alt={game.name}
+              onLoad={() => setImgLoading(false)}
+            />
             {!!game.parent_platforms?.length && (
               <PlatformsIcons platforms={game.parent_platforms} />
             )}

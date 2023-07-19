@@ -79,7 +79,7 @@ body {
   grid-template-columns: 1fr 4fr 1fr;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid var(--primary);
+  /* border-bottom: 1px solid var(--primary); */
 }
 
 .user-nav {
@@ -346,6 +346,23 @@ main {
   height: 50%;
   border-radius: 8px;
   position: relative;
+}
+
+.search-results--image-wrapper.image-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--background-fade);
+}
+
+.search-results--image-wrapper.image-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent, 30%, var(--background), 90%, transparent);
+  animation-name: processing;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
 }
 
 .search-results--item img {
@@ -743,7 +760,7 @@ input:-webkit-autofill {
 }
 
 .game-info-page .game-info {
-  max-width: 1000px;
+  max-width: 750px;
   flex-basis: max(60vw, 600px);
 }
 
@@ -772,7 +789,7 @@ input:-webkit-autofill {
 .game-info-page .img-container {
   margin-top: calc(var(--height) * 0.2);
   width: 100%;
-  max-height: 500px;
+  max-height: 350px;
   overflow: hidden;
   display: flex;
   align-items: center;
