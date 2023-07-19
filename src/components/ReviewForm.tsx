@@ -3,23 +3,36 @@ import { useFetcher } from 'react-router-dom';
 import useProcessing from '../hooks/useProcessing';
 import bioteIcon from '../assets/icons/biotes/biote.svg';
 import useUpdateListener from '../hooks/useUpdateListener';
+import type { ErrorNoteType } from './UserGameData';
 
 interface PropTypes {
   gameID: number;
   initialValue: string;
+  setError: React.Dispatch<React.SetStateAction<ErrorNoteType | null>>;
 }
 
-export default function ReviewForm({ gameID, initialValue }: PropTypes) {
+export default function ReviewForm({
+  gameID,
+  initialValue,
+  setError,
+}: PropTypes) {
   const [review, setReview] = useState('');
   const fetcher = useFetcher();
+
+  useEffect(() => {
+    if (fetcher.data?.error) {
+      setError({
+        message: 'Error updating review',
+        details: fetcher.data.error,
+      });
+    }
+  }, [fetcher.data]);
 
   function handleReviewChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setReview(e.target.value);
   }
 
   const newUpdate = useUpdateListener(fetcher.data?.review);
-
-  console.log(newUpdate);
 
   useEffect(() => {
     setReview(initialValue);

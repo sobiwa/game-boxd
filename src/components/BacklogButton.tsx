@@ -8,12 +8,16 @@ import bioteIcon from '../assets/icons/biotes/biote.svg';
 import arrowIcon from '../assets/icons/arrow.svg';
 import Slider from './Slider';
 import InterestDisplay from './InterestDisplay';
+import type { ErrorNoteType } from './UserGameData';
 
 interface PropTypes {
   gameID: number;
   initialSetting: boolean | undefined;
   initialBacklogDegree: number;
-  label: boolean;
+  label?: boolean;
+  setError: React.Dispatch<
+    React.SetStateAction<ErrorNoteType | null>
+  >;
 }
 
 export default function BacklogButton({
@@ -21,6 +25,7 @@ export default function BacklogButton({
   gameID,
   initialBacklogDegree,
   label,
+  setError,
 }: PropTypes) {
   const fetcher = useFetcher();
   const [userSetting, setUserSetting] = useState(initialSetting ?? false);
@@ -29,10 +34,19 @@ export default function BacklogButton({
   const [showSlider, setShowSlider] = useState(false);
 
   useEffect(() => {
-    if (fetcher?.data?.backlogged !== undefined) {
+    if (fetcher.data?.backlogged !== undefined) {
       setUserSetting(fetcher.data.backlogged);
     }
   }, [fetcher.data?.backlogged]);
+
+  useEffect(() => {
+    if (fetcher.data?.error) {
+      setError({
+        message: 'Error updating backlog',
+        details: fetcher.data.error,
+      });
+    }
+  }, [fetcher]);
 
   // update when user data is retrieved from firebase
   useEffect(() => {

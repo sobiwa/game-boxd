@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useFetchers } from 'react-router-dom';
 import { OutletContext, type UserGameDataItem as UserData } from '../App';
 import { getUserDataForGame } from '../firebase';
 import BacklogButton from './BacklogButton';
 import BioteRanker from './BioteRanker';
 import ReviewForm from './ReviewForm';
+import ErrorNote from './ErrorNote';
 
 interface PropTypes {
   gameID: number | string;
 }
 
-interface ErrorNote {
+export interface ErrorNote {
   message: string;
-  origin: string;
+  details: string;
 }
 
 export default function UserGameData({ gameID }: PropTypes) {
@@ -23,6 +24,13 @@ export default function UserGameData({ gameID }: PropTypes) {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [error, setError] = useState<ErrorNote | null>(null);
+
+  // const fetchers = useFetchers();
+
+  // const errorArray = fetchers
+  //   .filter((item) => item?.data && 'error' in item.data)
+  //   .map((item) => item.data);
+  // console.log(errorArray);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -41,8 +49,10 @@ export default function UserGameData({ gameID }: PropTypes) {
             setBacklogDegree(retrievedData.backlogDegree);
         }
       } catch (err) {
-        console.log(err);
-        setError({ message: (err as Error).message, origin: 'fetchUserData' });
+        setError({
+          message: 'Error retrieving user data',
+          details: (err as Error).message,
+        });
       }
     }
 
@@ -58,14 +68,20 @@ export default function UserGameData({ gameID }: PropTypes) {
           gameID={+gameID}
           initialSetting={backlogged}
           initialBacklogDegree={backlogDegree}
+          setError={setError}
           label
         />
       </div>
       <div className='ranker-container user-game-data--item'>
-        <BioteRanker gameID={+gameID} initialRating={rating} label />
+        <BioteRanker
+          gameID={+gameID}
+          initialRating={rating}
+          setError={setError}
+          label
+        />
       </div>
-      <ReviewForm gameID={+gameID} initialValue={review} />
-      {error && <div className='error-bubble'>{error.message}</div>}
+      <ReviewForm gameID={+gameID} initialValue={review} setError={setError} />
+      {error && <ErrorNote message={error.message} details={error.details} setError={setError}/>}
     </div>
   );
 }

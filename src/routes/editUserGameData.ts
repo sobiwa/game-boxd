@@ -62,8 +62,8 @@ export default async function editUserGameData({
   const { gameID } = params;
   if (!gameID) return 'Error: no game id';
   const newUpdates = convertData(updates, +gameID);
-  console.log(newUpdates);
   try {
+    throw new Error('test error');
     await updateUserGameData(newUpdates);
     return newUpdates;
   } catch (err) {

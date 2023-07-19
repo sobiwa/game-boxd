@@ -17,6 +17,8 @@ export default function useProcessing(formData: FormData | undefined) {
 
     if (formData) {
       initiateProcessing();
+    } else {
+      setProcessing(false);
     }
 
     return () => {

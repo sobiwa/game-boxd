@@ -8,10 +8,12 @@ import BacklogButton from './BacklogButton';
 import { type UserGameDataItem } from '../App';
 import ReleaseDate from './ReleaseDate';
 import metaColor from '../helpers/metaColor';
+import type { ErrorNoteType } from './UserGameData';
 
 interface SearchProps {
   game: Result;
   initialUserData: UserGameDataItem | undefined;
+  setError: React.Dispatch<React.SetStateAction<ErrorNoteType | null>>;
 }
 
 /*
@@ -22,7 +24,11 @@ and controlled based on success of writes, avoiding
 unnecessary reads
 */
 
-export default function SearchResult({ game, initialUserData }: SearchProps) {
+export default function SearchResult({
+  game,
+  initialUserData,
+  setError,
+}: SearchProps) {
   const imgSrc = useRef(game.background_image ?? randomLogo());
 
   return (
@@ -47,11 +53,16 @@ export default function SearchResult({ game, initialUserData }: SearchProps) {
             {game.metacritic}
           </div>
         )}
-        <BioteRanker initialRating={initialUserData?.rating} gameID={game.id} />
+        <BioteRanker
+          initialRating={initialUserData?.rating}
+          gameID={game.id}
+          setError={setError}
+        />
         <BacklogButton
           initialSetting={initialUserData?.backlogged}
           initialBacklogDegree={initialUserData?.backlogDegree ?? 0}
           gameID={game.id}
+          setError={setError}
         />
       </div>
     </div>

@@ -897,6 +897,7 @@ input:-webkit-autofill {
 }
 
 .user-game-data {
+  position: relative;
   flex-grow: 1;
   max-width: 600px;
   align-self: flex-start;
@@ -905,8 +906,75 @@ input:-webkit-autofill {
   padding-bottom: 50px;
   color: var(--primary);
   border-radius: 4px;
-  /* margin-block: auto; */
   --icon: calc(40px + 0.5vw);
+}
+
+.user-game-data .error-note-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.search-results .error-note-wrapper {
+  position: fixed;
+  top: 5px;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+@keyframes drop-in {
+  from {
+    translate: 0 -100%;
+  }
+
+  to {
+    translate: 0;
+  }
+}
+
+.error-note {
+  animation-name: drop-in;
+  animation-duration: 0.2s;
+  background-color: var(--pink);
+  color: var(--background-fade);
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: -1px 1px 5px black;
+  max-width: 200px;
+}
+
+.error-note .primary-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--background);
+}
+
+.error-info-button,
+.error-close-button {
+  height: 25px;
+  padding: 3px;
+  opacity: 0.7;
+}
+
+.error-close-button {
+  align-self: flex-start;
+  margin-top: -5px;
+  margin-right: -5px;
+}
+
+.error-info-button:hover,
+.error-close-button:hover {
+  opacity: 1;
+}
+
+.error-info-button img,
+.error-close-button img {
+  height: 100%;
 }
 
 .user-game-data .biote-ranker {
@@ -997,7 +1065,7 @@ input:-webkit-autofill {
   z-index: -1;
 }
 
-.user-game-data > *:not(:first-child) {
+.user-game-data > *:not(:first-child):not(.error-note-wrapper) {
   margin-top: 1em;
 }
 

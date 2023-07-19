@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLoaderData, useOutletContext } from 'react-router-dom';
 import type { Response as GamesSearchResponse } from '../mocks/searchLoader';
 import SearchResult from '../components/SearchResult';
 import { getUserDataForGamesArray } from '../firebase';
 import type { UserGameData, OutletContext } from '../App';
 import SearchBar from '../components/SearchBar';
+import type { ErrorNoteType } from '../components/UserGameData';
+import ErrorNote from '../components/ErrorNote';
 
 // TODO: compare search results with user data in firebase to populate cards
 
@@ -32,21 +34,8 @@ export default function Search() {
   const { user, setGameData, userGameData, setUserGameData }: OutletContext =
     useOutletContext();
 
-  /* TODO: 
-      x map games array into an array of ids
-      x contact firebase to return data of matches
-      x setState of data
-      x use that state to pass as prop to searchResult
-      
-      Editing:
-      x useFetcher to access form action and write change on firebase
-      x fetcher.formData = optimistic UI
-      (updates state immediately. can revert if update failed)
-      (idea: add pending status with former rating to state)
-      - actionResponse will indicate if write was success.
-      - if write is success update state to reflect new rating
-          
-  */
+  const [error, setError] = useState<ErrorNoteType | null>(null);
+
   let gameIds: number[] | undefined;
   if (games) {
     gameIds = games.results.map((game) => game.id);
@@ -89,8 +78,16 @@ export default function Search() {
               key={game.id}
               game={game}
               initialUserData={userGameData?.[game.id]}
+              setError={setError}
             />
           ))}
+          {error && (
+            <ErrorNote
+              message={error.message}
+              details={error.details}
+              setError={setError}
+            />
+          )}
         </div>
       )}
     </div>

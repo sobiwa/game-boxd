@@ -1,5 +1,9 @@
 import { useState, useMemo } from 'react';
-import { Params, useLoaderData, useParams } from 'react-router-dom';
+import {
+  Params,
+  useLoaderData,
+  useParams,
+} from 'react-router-dom';
 import parse from 'html-react-parser';
 import type { SingleGameResponse } from '../mocks/gameInfoLoader';
 import PlatformsIcons from '../components/PlatformIcons';
