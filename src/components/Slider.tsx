@@ -24,7 +24,7 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
   const fetcher = useFetcher();
 
   useEffect(() => {
-    if (fetcher.data?.backlogDegree) {
+    if (fetcher.data?.backlogDegree !== undefined) {
       setDegree(fetcher.data.backlogDegree);
     }
   }, [fetcher]);
@@ -72,7 +72,8 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
   function handleNumberBlur() {
     if (
       fetcher.formData ||
-      Number(fetcher.data?.backlogDegree) === hoverDegree
+      Number(fetcher.data?.backlogDegree) === hoverDegree ||
+      degree === hoverDegree
     ) {
       return;
     }
@@ -117,7 +118,7 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
           onChange={(e) => setHoverDegree(+e.target.value)}
           className='slider-number'
           type='number'
-          min='1'
+          min='0'
           max='100'
           value={active ? hoverDegree : degreeAppearance}
         />
@@ -137,6 +138,24 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
             </div>
           )}
         </div>
+        {degreeAppearance > 0 && (
+          <button
+            className='nullify-button'
+            type='submit'
+            onPointerEnter={() => {
+              setActive(true);
+              setHoverDegree(0);
+            }}
+            onPointerCancel={unhover}
+            onPointerLeave={unhover}
+            onFocus={() => {
+              setActive(true);
+              setHoverDegree(0);
+            }}
+            onBlur={unhover}
+            aria-label='delete interest rating'
+          />
+        )}
       </fetcher.Form>
     </div>
   );

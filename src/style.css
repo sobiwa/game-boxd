@@ -41,6 +41,7 @@ html {
 } */
 
 *:focus-visible {
+  z-index: 1;
   outline: 2px solid var(--pink);
 }
 
@@ -590,25 +591,26 @@ input:-webkit-autofill {
   transition: opacity 0.1s;
 }
 
-.biote-ranker:hover .nullify-button {
-  display: block;
+.biote-ranker:hover .nullify-button,
+.slider:hover .nullify-button {
+  visibility: visible;
+}
+
+.slider .nullify-button {
+  --size: calc(var(--icon) * 0.5);
+  border: 1px solid var(--purple);
+  background-image: url('./assets/icons/x-empty-purple.svg');
+}
+
+.slider .nullify-button:hover {
+  background-image: url('./assets/icons/x-purple.svg');
 }
 
 .biote-ranker .nullify-button {
-  display: none;
   --size: calc(var(--icon) * 0.7);
-  height: var(--size);
-  width: var(--size);
-  border: 0.5px solid var(--primary);
-  border-radius: 50%;
-  padding: calc(var(--icon) * 0.2);
-  opacity: 1;
+  border: 1px solid var(--primary);
   background-image: url('./assets/icons/x-empty.svg');
-  background-size: calc(var(--size) * 0.5);
-  background-repeat: no-repeat;
-  background-position: center;
   align-self: center;
-  transition: 0.3s;
   margin-left: calc(var(--icon) * 0.2);
 }
 
@@ -616,8 +618,16 @@ input:-webkit-autofill {
   background-image: url('./assets/icons/x.svg');
 }
 
-.biote-ranker .nullify-button img {
-  height: 100%;
+.nullify-button {
+  visibility: hidden;
+  height: var(--size);
+  width: var(--size);
+  border-radius: 50%;
+  padding: calc(var(--size) * 0.2);
+  background-size: calc(var(--size) * 0.5);
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: 0.1s;
 }
 
 @keyframes temp {
