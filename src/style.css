@@ -315,10 +315,19 @@ main {
   grid-template-columns: 1fr;
 }
 
+.rest-container {
+  position: relative;
+}
+
+.rest-placeholder {
+  visibility: hidden;
+}
+
 .rest-wrapper {
   display: grid;
   grid-template-columns: 0fr;
   transition: grid-template-columns 0.2s;
+  position: absolute;
 }
 
 .release-date .rest {
@@ -725,7 +734,7 @@ input:-webkit-autofill {
 
 .game-info-page {
   margin-inline: auto;
-  --height: min(calc(1rem + 1vw), 30px);
+  --height: clamp(1rem, calc(1rem + 1vw), max(1rem, 30px));
   display: flex;
   flex-wrap: wrap;
   gap: calc(16px + 2vw);
@@ -774,6 +783,10 @@ input:-webkit-autofill {
 .game-info-page .img-container .bg-img {
   width: 100%;
   height: auto;
+}
+
+.game-info-page .release-date {
+  font-size: calc(var(--height) * 0.8);
 }
 
 .description {

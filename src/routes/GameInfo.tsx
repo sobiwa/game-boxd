@@ -1,9 +1,5 @@
 import { useState, useMemo } from 'react';
-import {
-  Params,
-  useLoaderData,
-  useParams,
-} from 'react-router-dom';
+import { Params, useLoaderData, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import type { SingleGameResponse } from '../mocks/gameInfoLoader';
 import PlatformsIcons from '../components/PlatformIcons';
@@ -76,9 +72,7 @@ export default function GameInfo() {
       <div className='game-info'>
         <div className='title-container'>
           <h1>{name}</h1>
-          <div className='title--sub'>
-            {released && <ReleaseDate rawDate={released} />}
-          </div>
+          {released && <ReleaseDate rawDate={released} />}
         </div>
         <div className='img-container'>
           {!!parentPlatforms && <PlatformsIcons platforms={parentPlatforms} />}
