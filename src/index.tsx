@@ -8,6 +8,7 @@ import mockSearchLoader from './mocks/searchLoader';
 import mockGameInfoLoader from './mocks/gameInfoLoader';
 import editUserGameData from './routes/editUserGameData';
 import GameInfo, { loader as gameInfoLoader } from './routes/GameInfo';
+import { action as signInAction } from './components/SignIn';
 
 const router = createHashRouter([
   {
@@ -16,7 +17,12 @@ const router = createHashRouter([
     children: [
       { path: 'search', element: <Search />, loader: mockSearchLoader },
       { path: 'edit/:gameID', action: editUserGameData },
-      { path: 'games/:gameID', element: <GameInfo />, loader: mockGameInfoLoader },
+      {
+        path: 'games/:gameID',
+        element: <GameInfo />,
+        loader: mockGameInfoLoader,
+      },
+      { path: 'account/sign-in', action: signInAction },
     ],
   },
 ]);

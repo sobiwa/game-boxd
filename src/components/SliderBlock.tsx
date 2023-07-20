@@ -18,9 +18,6 @@ export default function SliderBlock({
 }: PropTypes) {
   const degreeVisual = active ? hoverDegree : degree ?? 0;
   const imgSrc = +degreeVisual >= position ? blockIcon : blockEmptyIcon;
-  const style = {
-    backgroundColor: +degreeVisual >= position ? '#ae6b9c' : 'transparent',
-  };
 
   return (
     <div

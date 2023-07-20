@@ -31,8 +31,6 @@ function convertData(rawData: IncomingData, gameID: number): AlteredData {
     ...rawData,
   } as AlteredData;
 
-  console.log(typeof rawData.backlogDegree);
-
   if (rawData.backlogged) {
     returnObject.backlogged = rawData.backlogged === 'true';
   }
@@ -63,7 +61,7 @@ export default async function editUserGameData({
   if (!gameID) return 'Error: no game id';
   const newUpdates = convertData(updates, +gameID);
   try {
-    throw new Error('test error');
+    // throw new Error('test error');
     await updateUserGameData(newUpdates);
     return newUpdates;
   } catch (err) {

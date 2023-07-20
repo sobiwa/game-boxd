@@ -1,4 +1,3 @@
-import { useState, useRef } from 'react';
 import { format, parseISO } from 'date-fns';
 
 export default function ReleaseDate({ rawDate }: { rawDate: string }) {

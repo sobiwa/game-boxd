@@ -9,6 +9,15 @@
   src: url('./assets/fonts/NunitoSans-VariableFont_YTLC\,opsz\,wdth\,wght.woff');
 }
 
+@font-face {
+  font-family: 'Roboto';
+  src: url('./assets/fonts/Roboto-Medium.woff2') format('woff2'),
+    url('./assets/fonts/Roboto-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -359,7 +368,14 @@ main {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, transparent, 30%, var(--background), 90%, transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    30%,
+    var(--background),
+    90%,
+    transparent
+  );
   animation-name: processing;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
@@ -617,6 +633,34 @@ input:-webkit-autofill {
   transition: opacity 0.1s;
 }
 
+.sign-in-container .nullify-button {
+  --size: 35px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+}
+
+.nullify-button {
+  background-image: url('./assets/icons/x-empty.svg');
+  height: var(--size);
+  width: var(--size);
+  border-radius: 50%;
+  padding: calc(var(--size) * 0.2);
+  background-size: calc(var(--size) * 0.5);
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: 0.1s;
+}
+
+.nullify-button:hover {
+  background-image: url('./assets/icons/x.svg');
+}
+
+.biote-ranker .nullify-button,
+.slider .nullify-button {
+  visibility: hidden;
+}
+
 .biote-ranker:hover .nullify-button,
 .slider:hover .nullify-button {
   visibility: visible;
@@ -635,25 +679,8 @@ input:-webkit-autofill {
 .biote-ranker .nullify-button {
   --size: calc(var(--icon) * 0.7);
   border: 1px solid var(--primary);
-  background-image: url('./assets/icons/x-empty.svg');
   align-self: center;
   margin-left: calc(var(--icon) * 0.2);
-}
-
-.biote-ranker .nullify-button:hover {
-  background-image: url('./assets/icons/x.svg');
-}
-
-.nullify-button {
-  visibility: hidden;
-  height: var(--size);
-  width: var(--size);
-  border-radius: 50%;
-  padding: calc(var(--size) * 0.2);
-  background-size: calc(var(--size) * 0.5);
-  background-repeat: no-repeat;
-  background-position: center;
-  transition: 0.1s;
 }
 
 @keyframes temp {
@@ -888,8 +915,8 @@ input:-webkit-autofill {
 }
 
 .game-info-box--small .esrb {
-  width: calc(40px + 0.5vw);
-  height: auto;
+  height: calc(40px + 0.5vw);
+  width: auto;
 }
 
 .game-info-box--small .metascore {
@@ -945,6 +972,15 @@ input:-webkit-autofill {
   right: 0;
   padding: 5px;
   overflow: hidden;
+}
+
+.sign-in-container .error-note-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right:0;
+  margin-left: auto;
+  width: fit-content;
 }
 
 .search-results .error-note-wrapper {
@@ -1435,4 +1471,150 @@ input:-webkit-autofill {
 
 .interest-display .display-block.empty {
   background-color: transparent;
+}
+
+.user-nav {
+  position: relative;
+}
+
+.user-nav--collapsible {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: max(100%, 150px);
+  background-color: var(--primary);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  z-index: 3;
+}
+
+.user-nav--collapsible ul {
+  list-style: none;
+}
+
+.user-nav--collapsible ul li:not(:last-child) {
+  border-bottom: 1px solid var(--background-fade);
+}
+
+.user-nav--collapsible li {
+  width: 100%;
+  height: 100%;
+}
+
+.user-nav--collapsible li > * {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  font-weight: 500;
+  color: var(--background);
+}
+
+.sign-in-modal::backdrop {
+  background-color: #35363bf1;
+  background-color: #82c995e8;
+  opacity: 1;
+}
+
+.sign-in-modal {
+  margin: auto;
+  background-color: var(--background-fade);
+  border: none;
+  border-radius: 4px;
+}
+
+.sign-in-container {
+  padding: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  color: var(--primary);
+}
+
+.sign-in-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-in--list {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sign-in--list li {
+  display: flex;
+  gap: 3px;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sign-in--list li label {
+  color: var(--primary);
+}
+
+.sign-in--list li input {
+  width: 100%;
+  background-color: var(--background);
+  border: none;
+  border-radius: 4px;
+  border-bottom: 1px solid var(--primary);
+  height: 1.8rem;
+  font-size: 100%;
+  font-family: inherit;
+  color: var(--primary);
+  text-indent: 4px;
+}
+
+.sign-in--list li input:focus-visible {
+  outline: 1px solid var(--primary);
+  color: var(--text);
+}
+
+.sign-in--list .button-container {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.button {
+  font-size: 1.1rem;
+  padding: 4px 16px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  transition: 0.2s;
+  background-color: var(--background-fade);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.button:hover {
+  color: var(--background);
+  background-color: var(--primary);
+}
+
+.sign-in-container a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+}
+
+.sign-in-container a:hover {
+  text-decoration: underline;
+}
+
+.google-button {
+  transition: 0.2s;
+}
+
+.google-button:active {
+  opacity: 0.8;
+}
+
+.google-button:hover {
+  translate: 0 -1px;
 }

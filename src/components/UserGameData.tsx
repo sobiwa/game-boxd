@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useOutletContext, useFetchers } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { OutletContext, type UserGameDataItem as UserData } from '../App';
 import { getUserDataForGame } from '../firebase';
 import BacklogButton from './BacklogButton';
@@ -11,26 +11,18 @@ interface PropTypes {
   gameID: number | string;
 }
 
-export interface ErrorNote {
+export interface ErrorNoteType {
   message: string;
   details: string;
 }
 
 export default function UserGameData({ gameID }: PropTypes) {
   const { user }: OutletContext = useOutletContext();
-  // const [userData, setUserData] = useState<UserData | null>(null);
   const [backlogged, setBacklogged] = useState(false);
   const [backlogDegree, setBacklogDegree] = useState(0);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
-  const [error, setError] = useState<ErrorNote | null>(null);
-
-  // const fetchers = useFetchers();
-
-  // const errorArray = fetchers
-  //   .filter((item) => item?.data && 'error' in item.data)
-  //   .map((item) => item.data);
-  // console.log(errorArray);
+  const [error, setError] = useState<ErrorNoteType | null>(null);
 
   useEffect(() => {
     async function fetchUserData() {

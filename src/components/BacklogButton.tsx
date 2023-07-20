@@ -110,7 +110,7 @@ export default function BacklogButton({
           </button>
         </fetcher.Form>
         {appearsBacklogged && backlogDegree > 0 && (
-          <InterestDisplay interest={backlogDegree} />
+          <InterestDisplay interest={backlogDegree} id={gameID} />
         )}
         {label && appearsBacklogged && (
           <>

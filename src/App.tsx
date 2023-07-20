@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import randomLogo from './assets/logo';
 import useUser, { type User } from './hooks/useUser';
@@ -6,6 +6,7 @@ import { type GamesArray } from './mocks/searchLoader';
 import SearchBar from './components/SearchBar';
 import bioteLogo from './assets/icons/biotes/biote.svg';
 import UserNav from './components/UserNav';
+import SignIn from './components/SignIn';
 
 export interface UserGameDataItem {
   gameID: number;
@@ -30,6 +31,8 @@ export interface OutletContext {
 
 export default function App() {
   const user = useUser();
+
+  const signInRef = useRef<null | HTMLDialogElement>(null);
   const [gameData, setGameData] = useState<GamesArray | null>(null);
   const [userGameData, setUserGameData] = useState<UserGameData | null>(null);
 
@@ -50,6 +53,14 @@ export default function App() {
     setUserGameData,
   };
 
+  function openSignInModal() {
+    if (signInRef.current) signInRef.current.showModal();
+  }
+
+  function closeSignInModal() {
+    if (signInRef.current) signInRef.current.close();
+  }
+
   return (
     <div className='app'>
       <div className='header'>
@@ -57,11 +68,14 @@ export default function App() {
           <img src={logo.src} style={logo.style} alt='logo' />
         </div>
         {!loc.search && <SearchBar />}
-        <UserNav user={user} />
+        <UserNav user={user} openSignIn={() => openSignInModal()}/>
       </div>
       <main>
         <Outlet context={outletContext} />
       </main>
+      <dialog ref={signInRef} className='sign-in-modal'>
+        <SignIn cancel={() => closeSignInModal()} />
+      </dialog>
     </div>
   );
 }

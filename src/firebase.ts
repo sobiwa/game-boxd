@@ -140,4 +140,8 @@ export async function userVerificationComplete() {
   return userData.exists() && userData.data().verified;
 }
 
+export async function emailSignIn(email: string, password: string) {
+  await signInWithEmailAndPassword(auth, email, password);
+}
+
 export { auth };
