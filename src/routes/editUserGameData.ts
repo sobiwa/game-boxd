@@ -54,14 +54,14 @@ export default async function editUserGameData({
   request: Request;
   params: Params;
 }) {
-  // await delay(2000);
+  await delay(2000);
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
   const { gameID } = params;
   if (!gameID) return 'Error: no game id';
   const newUpdates = convertData(updates, +gameID);
   try {
-    // throw new Error('test error');
+    throw new Error('test error');
     await updateUserGameData(newUpdates);
     return newUpdates;
   } catch (err) {

@@ -1,19 +1,25 @@
 import { useRef, useState, useEffect } from 'react';
-import { useFetcher, useSubmit } from 'react-router-dom';
+import { useFetcher } from 'react-router-dom';
 import SliderBlock from './SliderBlock';
 import useProcessing from '../hooks/useProcessing';
 import useUpdateListener from '../hooks/useUpdateListener';
 import infoIcon from '../assets/icons/info.svg';
+import useErrorRefresher from '../hooks/useErrorRefresher';
+import type { ErrorNoteType } from './ErrorNote';
 
 interface PropTypes {
   gameID: number;
   degree: number;
   setDegree: React.Dispatch<React.SetStateAction<number>>;
+  setError: React.Dispatch<React.SetStateAction<ErrorNoteType | null>>;
 }
 
-export default function Slider({ gameID, degree, setDegree }: PropTypes) {
-  // TODO: fix bug where number stops working after hovering buttons
-
+export default function Slider({
+  gameID,
+  degree,
+  setDegree,
+  setError,
+}: PropTypes) {
   const formRef = useRef<null | HTMLFormElement>(null);
   const numberRef = useRef<null | HTMLInputElement>(null);
 
@@ -23,13 +29,24 @@ export default function Slider({ gameID, degree, setDegree }: PropTypes) {
 
   const fetcher = useFetcher();
 
+  useErrorRefresher(fetcher.state, setError);
+
   useEffect(() => {
     if (fetcher.data?.backlogDegree !== undefined) {
       setDegree(fetcher.data.backlogDegree);
     }
+  }, [fetcher.data?.backlogDegree]);
+
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data?.error) {
+      setError({
+        message: 'Error updating interest',
+        details: fetcher.data.error,
+      });
+    }
   }, [fetcher]);
 
-  const processing = useProcessing(fetcher.formData);
+  const processing = useProcessing(fetcher.state);
 
   const newUpdate = useUpdateListener(fetcher.data?.backlogDegree);
 

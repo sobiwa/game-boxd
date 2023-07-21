@@ -3,7 +3,8 @@ import { useFetcher } from 'react-router-dom';
 import Biote from './Biote';
 import useProcessing from '../hooks/useProcessing';
 import useUpdateListener from '../hooks/useUpdateListener';
-import type { ErrorNoteType } from './UserGameData';
+import type { ErrorNoteType } from './ErrorNote';
+import useErrorRefresher from '../hooks/useErrorRefresher';
 
 interface PropTypes {
   gameID: number;
@@ -19,6 +20,8 @@ export default function BioteRanker({
   setError,
 }: PropTypes) {
   const fetcher = useFetcher();
+
+  useErrorRefresher(fetcher.state, setError);
 
   const active = useRef(false);
 
@@ -49,11 +52,13 @@ export default function BioteRanker({
   }
 
   useEffect(() => {
-    if (fetcher?.data?.rating !== undefined) {
+    if (fetcher.data?.rating !== undefined) {
       setUserRating(fetcher.data.rating ?? 0);
     }
-    if (fetcher?.data?.error !== undefined) {
-      console.log('setting error');
+  }, [fetcher.data?.rating]);
+
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data?.error !== undefined) {
       setError({
         message: 'Error updating rating',
         details: fetcher.data.error,
@@ -63,7 +68,7 @@ export default function BioteRanker({
 
   const ratingAppearance = tempRating ?? userRating;
 
-  const processing = useProcessing(fetcher.formData);
+  const processing = useProcessing(fetcher.state);
 
   const newUpdate = useUpdateListener(fetcher.data?.rating);
 

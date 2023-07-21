@@ -9,15 +9,14 @@ import arrowIcon from '../assets/icons/arrow.svg';
 import Slider from './Slider';
 import InterestDisplay from './InterestDisplay';
 import type { ErrorNoteType } from './UserGameData';
+import useErrorRefresher from '../hooks/useErrorRefresher';
 
 interface PropTypes {
   gameID: number;
   initialSetting: boolean | undefined;
   initialBacklogDegree: number;
   label?: boolean;
-  setError: React.Dispatch<
-    React.SetStateAction<ErrorNoteType | null>
-  >;
+  setError: React.Dispatch<React.SetStateAction<ErrorNoteType | null>>;
 }
 
 export default function BacklogButton({
@@ -28,6 +27,9 @@ export default function BacklogButton({
   setError,
 }: PropTypes) {
   const fetcher = useFetcher();
+
+  useErrorRefresher(fetcher.state, setError);
+
   const [userSetting, setUserSetting] = useState(initialSetting ?? false);
   const [backlogDegree, setBacklogDegree] = useState(initialBacklogDegree ?? 0);
 
@@ -40,7 +42,7 @@ export default function BacklogButton({
   }, [fetcher.data?.backlogged]);
 
   useEffect(() => {
-    if (fetcher.data?.error) {
+    if (fetcher.state === 'idle' && fetcher.data?.error) {
       setError({
         message: 'Error updating backlog',
         details: fetcher.data.error,
@@ -59,7 +61,7 @@ export default function BacklogButton({
 
   // const temp = fetcher?.formData?.get('backlogged');
 
-  const processing = useProcessing(fetcher.formData);
+  const processing = useProcessing(fetcher.state);
 
   const newUpdate = useUpdateListener(fetcher.data?.backlogged);
 
@@ -126,6 +128,7 @@ export default function BacklogButton({
                 gameID={gameID}
                 degree={backlogDegree}
                 setDegree={setBacklogDegree}
+                setError={setError}
               />
             )}
           </>

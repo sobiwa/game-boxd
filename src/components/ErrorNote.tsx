@@ -1,8 +1,11 @@
-import { useMemo, useState } from 'react';
-import uniqid from 'uniqid';
+import { useState } from 'react';
 import infoIcon from '../assets/icons/info-black.svg';
-import type { ErrorNoteType } from './UserGameData';
 import closeIcon from '../assets/icons/close-black.svg';
+
+export interface ErrorNoteType {
+  message: string;
+  details: string;
+}
 
 interface PropTypes {
   message: string;
@@ -11,22 +14,22 @@ interface PropTypes {
 }
 
 export default function ErrorNote({ message, details, setError }: PropTypes) {
-  const uniqueKey = useMemo(() => uniqid(), [message]);
-
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div key={uniqueKey} className='error-note-wrapper'>
+    <div className='error-note-wrapper'>
       <div className='error-note'>
         <div className='primary-message'>
-          <button
-            type='button'
-            className='error-info-button'
-            onClick={() => setShowDetails((prev) => !prev)}
-          >
-            <img src={infoIcon} alt='view details' />
-          </button>
-          {message}
+          <div>
+            <button
+              type='button'
+              className='error-info-button'
+              onClick={() => setShowDetails((prev) => !prev)}
+            >
+              <img src={infoIcon} alt='view details' />
+            </button>
+            {message}
+          </div>
           <button
             type='button'
             className='error-close-button'
@@ -35,7 +38,15 @@ export default function ErrorNote({ message, details, setError }: PropTypes) {
             <img src={closeIcon} alt='close' />
           </button>
         </div>
-        {showDetails && <p>{details}</p>}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateRows: showDetails ? '1fr' : '0fr',
+            transition: 'grid-template-rows 0.2s',
+          }}
+        >
+          <p style={{ overflow: 'hidden' }}>{details}</p>
+        </div>
       </div>
     </div>
   );

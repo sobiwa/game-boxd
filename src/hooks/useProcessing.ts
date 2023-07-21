@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 
 // returns true if form is still submitting to database after delay
-export default function useProcessing(formData: FormData | undefined) {
+export default function useProcessing(
+  state: 'idle' | 'loading' | 'submitting'
+) {
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
@@ -10,12 +12,13 @@ export default function useProcessing(formData: FormData | undefined) {
       await new Promise((res) => {
         setTimeout(res, 300);
       });
+      console.log(ignore);
       if (!ignore) {
         setProcessing(true);
       }
     }
 
-    if (formData) {
+    if (state === 'submitting' || state === 'loading') {
       initiateProcessing();
     } else {
       setProcessing(false);
@@ -23,9 +26,8 @@ export default function useProcessing(formData: FormData | undefined) {
 
     return () => {
       ignore = true;
-      setProcessing(false);
     };
-  }, [formData]);
+  }, [state]);
 
   return processing;
 }

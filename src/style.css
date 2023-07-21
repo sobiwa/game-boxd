@@ -633,11 +633,12 @@ input:-webkit-autofill {
   transition: opacity 0.1s;
 }
 
-.sign-in-container .nullify-button {
+.account-slider-wrapper .nullify-button {
   --size: 35px;
   position: absolute;
   top: 3px;
   left: 3px;
+  z-index: 1;
 }
 
 .nullify-button {
@@ -974,13 +975,14 @@ input:-webkit-autofill {
   overflow: hidden;
 }
 
-.sign-in-container .error-note-wrapper {
+.account-slider-wrapper .error-note-wrapper {
   position: absolute;
   top: 0;
   left: 0;
-  right:0;
+  right: 0;
   margin-left: auto;
   width: fit-content;
+  z-index: 1;
 }
 
 .search-results .error-note-wrapper {
@@ -1015,9 +1017,18 @@ input:-webkit-autofill {
 
 .error-note .primary-message {
   display: flex;
+  /* grid-template-columns: repeat(3, auto); */
+  /* justify-content: center; */
   align-items: center;
-  gap: 4px;
   color: var(--background);
+}
+
+.error-note .primary-message div:first-child {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .error-info-button,
@@ -1093,7 +1104,6 @@ input:-webkit-autofill {
   letter-spacing: 0.05em;
   overflow: hidden;
   isolation: isolate;
-  transition: background-color 0.2s;
 }
 
 @keyframes processingGrow {
@@ -1106,7 +1116,14 @@ input:-webkit-autofill {
   }
 }
 
-.review-submit.processing::before {
+.sign-in-button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.review-submit.processing::before,
+.sign-in-button.processing::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -1522,23 +1539,52 @@ input:-webkit-autofill {
   border-radius: 4px;
 }
 
-.sign-in-container {
+.account-slide {
   padding: 40px;
-  position: relative;
+  width: 330px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  color: var(--primary);
 }
 
-.sign-in-container form {
+.account-slide form {
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.account-slide.sign-up form {
+  flex-grow: 1;
+}
+
+.account-slide .back-button {
+  height: 30px;
+  width: 30px;
+  margin-right: auto;
+  margin-left: -20px;
+  margin-bottom: -20px;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+  padding: 3px;
+}
+
+.account-slide .back-button img {
+  height: 100%;
+  transition: 0.2s;
+}
+
+.account-slide .back-button:hover img {
+  translate: -2px 0;
+}
+
+.account-slide .back-button:active img {
+  translate: 0;
 }
 
 .sign-in--list {
-  width: 250px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1552,7 +1598,8 @@ input:-webkit-autofill {
 }
 
 .sign-in--list li label {
-  color: var(--primary);
+  font-weight: 300;
+  font-size: 0.9rem;
 }
 
 .sign-in--list li input {
@@ -1595,7 +1642,7 @@ input:-webkit-autofill {
   background-color: var(--primary);
 }
 
-.sign-in-container a {
+.account-slide .create-account-button {
   text-decoration: none;
   font-size: 1.1rem;
   font-weight: 300;
@@ -1603,7 +1650,7 @@ input:-webkit-autofill {
   color: var(--primary);
 }
 
-.sign-in-container a:hover {
+.account-slide .create-account-button:hover {
   text-decoration: underline;
 }
 
@@ -1618,3 +1665,15 @@ input:-webkit-autofill {
 .google-button:hover {
   translate: 0 -1px;
 }
+
+.account-slider-wrapper {
+  position: relative;
+}
+
+.account-slider {
+  color: var(--primary);
+  display: flex;
+  width: 330px;
+  transition: translate 0.3s;
+}
+

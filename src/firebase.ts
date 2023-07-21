@@ -144,4 +144,8 @@ export async function emailSignIn(email: string, password: string) {
   await signInWithEmailAndPassword(auth, email, password);
 }
 
+export async function emailSignUp(email: string, password: string) {
+  await createUserWithEmailAndPassword(auth, email, password);
+}
+
 export { auth };

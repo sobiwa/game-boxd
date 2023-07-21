@@ -4,6 +4,7 @@ import useProcessing from '../hooks/useProcessing';
 import bioteIcon from '../assets/icons/biotes/biote.svg';
 import useUpdateListener from '../hooks/useUpdateListener';
 import type { ErrorNoteType } from './UserGameData';
+import useErrorRefresher from '../hooks/useErrorRefresher';
 
 interface PropTypes {
   gameID: number;
@@ -19,14 +20,16 @@ export default function ReviewForm({
   const [review, setReview] = useState('');
   const fetcher = useFetcher();
 
+  useErrorRefresher(fetcher.state, setError);
+
   useEffect(() => {
-    if (fetcher.data?.error) {
+    if (fetcher.state === 'idle' && fetcher.data?.error) {
       setError({
         message: 'Error updating review',
         details: fetcher.data.error,
       });
     }
-  }, [fetcher.data]);
+  }, [fetcher]);
 
   function handleReviewChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setReview(e.target.value);
@@ -38,7 +41,7 @@ export default function ReviewForm({
     setReview(initialValue);
   }, [initialValue]);
 
-  const processing = useProcessing(fetcher.formData);
+  const processing = useProcessing(fetcher.state);
 
   return (
     <fetcher.Form

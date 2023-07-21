@@ -9,6 +9,7 @@ import mockGameInfoLoader from './mocks/gameInfoLoader';
 import editUserGameData from './routes/editUserGameData';
 import GameInfo, { loader as gameInfoLoader } from './routes/GameInfo';
 import { action as signInAction } from './components/SignIn';
+import { action as signUpAction } from './components/SignUp';
 
 const router = createHashRouter([
   {
@@ -23,6 +24,7 @@ const router = createHashRouter([
         loader: mockGameInfoLoader,
       },
       { path: 'account/sign-in', action: signInAction },
+      { path: 'account/sign-up', action: signUpAction },
     ],
   },
 ]);

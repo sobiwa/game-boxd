@@ -6,7 +6,7 @@ import { type GamesArray } from './mocks/searchLoader';
 import SearchBar from './components/SearchBar';
 import bioteLogo from './assets/icons/biotes/biote.svg';
 import UserNav from './components/UserNav';
-import SignIn from './components/SignIn';
+import AccountSlider from './components/AccountSlider';
 
 export interface UserGameDataItem {
   gameID: number;
@@ -33,6 +33,7 @@ export default function App() {
   const user = useUser();
 
   const signInRef = useRef<null | HTMLDialogElement>(null);
+
   const [gameData, setGameData] = useState<GamesArray | null>(null);
   const [userGameData, setUserGameData] = useState<UserGameData | null>(null);
 
@@ -68,13 +69,13 @@ export default function App() {
           <img src={logo.src} style={logo.style} alt='logo' />
         </div>
         {!loc.search && <SearchBar />}
-        <UserNav user={user} openSignIn={() => openSignInModal()}/>
+        <UserNav user={user} openSignIn={() => openSignInModal()} />
       </div>
       <main>
         <Outlet context={outletContext} />
       </main>
       <dialog ref={signInRef} className='sign-in-modal'>
-        <SignIn cancel={() => closeSignInModal()} />
+        <AccountSlider close={() => closeSignInModal()} />
       </dialog>
     </div>
   );

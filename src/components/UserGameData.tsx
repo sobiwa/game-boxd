@@ -53,6 +53,7 @@ export default function UserGameData({ gameID }: PropTypes) {
     }
   }, [user]);
 
+
   return (
     <div className='user-game-data'>
       <div className='user-game-data--item'>
