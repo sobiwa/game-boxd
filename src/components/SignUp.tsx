@@ -107,6 +107,7 @@ export default function SignUp({ close, setSlide, setError }: PropTypes) {
             <label htmlFor='confirm-password'>Confirm Password</label>
             <input
               id='confirm-password'
+              className={password !== confirmPassword ? 'error-input' : ''}
               type='password'
               name='confirmPassword'
               value={confirmPassword}

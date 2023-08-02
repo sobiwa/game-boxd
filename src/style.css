@@ -1615,6 +1615,14 @@ input:-webkit-autofill {
   text-indent: 4px;
 }
 
+.sign-in--list li input.error-input {
+  border-bottom: 1px solid var(--pink);
+}
+
+.sign-in--list li input.error-input:focus-visible {
+  outline: 1px solid var(--pink);
+}
+
 .sign-in--list li input:focus-visible {
   outline: 1px solid var(--primary);
   color: var(--text);
@@ -1676,4 +1684,3 @@ input:-webkit-autofill {
   width: 330px;
   transition: translate 0.3s;
 }
-

@@ -12,7 +12,6 @@ export default function useProcessing(
       await new Promise((res) => {
         setTimeout(res, 300);
       });
-      console.log(ignore);
       if (!ignore) {
         setProcessing(true);
       }
